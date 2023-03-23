@@ -7,7 +7,13 @@ type Props = {
 };
 
 const ApplicantDetails = (props: Props) => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "all",
+  });
 
   const raceList = [
     "American Indian or Alaska Native",
@@ -31,7 +37,7 @@ const ApplicantDetails = (props: Props) => {
           <select
             name="race"
             id="race"
-            value="1"
+            defaultValue="1"
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -57,6 +63,7 @@ const ApplicantDetails = (props: Props) => {
           Age
           <input
             id="age"
+            placeholder="applicant's age"
             {...register("age", {
               required: "required",
               valueAsNumber: true,
@@ -69,6 +76,9 @@ const ApplicantDetails = (props: Props) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>
+            {errors.age?.type === "required" && "Age is required"}
+          </p>
         </label>
       </div>
       <div className="yearly-income-input">
@@ -76,6 +86,7 @@ const ApplicantDetails = (props: Props) => {
           Yearly Income
           <input
             id="yearlyIncome"
+            placeholder="most receent yearly income"
             {...register("yearlyIncome", {
               required: "required",
               valueAsNumber: true,
@@ -95,9 +106,12 @@ const ApplicantDetails = (props: Props) => {
           Credit Score
           <input
             id="creditScore"
+            placeholder="enter a number between 300 - 850"
             {...register("creditScore", {
               required: "required",
               valueAsNumber: true,
+              max: 850,
+              min: 350,
             })}
             type="number"
             onChange={(e) => {
@@ -107,15 +121,21 @@ const ApplicantDetails = (props: Props) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>
+            {errors.creditScore?.type === "min" && "Must be higher than 350"}
+            {errors.creditScore?.type === "max" &&
+              "Must be lower than or equal to 850"}
+          </p>
         </label>
       </div>
       <div className="eviction-history-selection">
         <label>
           Eviction History
           <select
+            placeholder="date off eviction"
             name="evictionHistory"
             id="evictionHistory"
-            value="1"
+            defaultValue="1"
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -141,7 +161,10 @@ const ApplicantDetails = (props: Props) => {
               required: "required",
               valueAsDate: true,
             })}
-            type="date"
+            type="text"
+            placeholder="date of eviction"
+            onFocus={(e) => (e.target.type = "date")}
+            onBlur={(e) => (e.target.type = "text")}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -157,7 +180,7 @@ const ApplicantDetails = (props: Props) => {
           <select
             name="criminalHistoryType"
             id="criminal-history-type"
-            value="1"
+            defaultValue="1"
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -182,7 +205,10 @@ const ApplicantDetails = (props: Props) => {
               required: "required",
               valueAsDate: true,
             })}
-            type="date"
+            type="text"
+            placeholder="date of conviction"
+            onFocus={(e) => (e.target.type = "date")}
+            onBlur={(e) => (e.target.type = "text")}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -192,6 +218,7 @@ const ApplicantDetails = (props: Props) => {
           />
           <input
             id="offense-name"
+            placeholder="name of offense"
             {...register("offenseName", {
               required: "required",
             })}
