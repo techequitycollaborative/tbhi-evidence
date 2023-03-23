@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
 import { useState } from 'react';
+import ApplicantDetails from '@/components/form/ApplicantDetails';
 
 import Start from '@/components/form/start';
 
@@ -23,12 +24,12 @@ const Form: NextPage = () => {
     }
   }
 
-  function formContent(step) {
+  function formContent(step: number) {
     switch(step) {
       case 0:
         return <Start formData={formData} setFormData={setFormData}/>;
       case 1:
-        return <div>form step 1 goes here</div>;
+        return <ApplicantDetails formData={formData} setFormData={setFormData}/>;
       case 2:
         return <div>form step 2 goes here</div>;
       case 3:
@@ -38,7 +39,7 @@ const Form: NextPage = () => {
       case 5:
         return <div>thank you goes here</div>;
       default:
-        return <Start />;
+        return <Start formData={formData} setFormData={setFormData}/>;
     }
   }
 
