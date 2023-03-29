@@ -2,14 +2,18 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, install the required packages:
+
+```bash
+npm install
+```
+
+This will also install packages for the database server. Note that you will need to place database connection info in `database/.env` for the server to run properly. Contact the project manager for details.
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
