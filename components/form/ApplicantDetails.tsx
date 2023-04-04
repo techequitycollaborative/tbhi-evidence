@@ -31,6 +31,7 @@ const ApplicantDetails = (props: Props) => {
 
   return (
     <div>
+      <p>Applicant Details</p>
       <div className="race-selection">
         <label>
           Race
@@ -38,6 +39,7 @@ const ApplicantDetails = (props: Props) => {
             name="race"
             id="race"
             defaultValue="1"
+            value={props.formData.race}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -69,6 +71,7 @@ const ApplicantDetails = (props: Props) => {
               valueAsNumber: true,
             })}
             type="number"
+            value={props.formData.age}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -92,6 +95,7 @@ const ApplicantDetails = (props: Props) => {
               valueAsNumber: true,
             })}
             type="number"
+            value={props.formData.yearlyIncome}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -107,6 +111,7 @@ const ApplicantDetails = (props: Props) => {
           <input
             id="creditScore"
             placeholder="enter a number between 300 - 850"
+            value={props.formData.creditScore}
             {...register("creditScore", {
               required: "required",
               valueAsNumber: true,
@@ -136,6 +141,7 @@ const ApplicantDetails = (props: Props) => {
             name="evictionHistory"
             id="evictionHistory"
             defaultValue="1"
+            value={props.formData.evictionHistory}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -165,6 +171,7 @@ const ApplicantDetails = (props: Props) => {
             placeholder="date of eviction"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
+            value={props.formData.evictionDate}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -181,6 +188,7 @@ const ApplicantDetails = (props: Props) => {
             name="criminalHistoryType"
             id="criminal-history-type"
             defaultValue="1"
+            value={props.formData.criminalHistoryType}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -206,6 +214,7 @@ const ApplicantDetails = (props: Props) => {
               valueAsDate: true,
             })}
             type="text"
+            value={props.formData.convictionDate}
             placeholder="date of conviction"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
@@ -223,6 +232,7 @@ const ApplicantDetails = (props: Props) => {
               required: "required",
             })}
             type="text"
+            value={props.formData.offenseName}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
