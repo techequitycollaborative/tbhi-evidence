@@ -1,19 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
   formData: any;
   setFormData: (e: any) => void;
+  setDisableNext: (e: boolean) => void;
 };
 
 const PropertyDetails = (props: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     mode: "all",
   });
+
+  useEffect(() => {
+    console.log("applicant details errors", errors, isValid);
+    if (isValid) {
+      props.setDisableNext(false);
+    } else {
+      props.setDisableNext(true);
+    }
+  }, [isValid]);
 
   return (
     <div>
@@ -83,12 +93,14 @@ const PropertyDetails = (props: Props) => {
         <label>
           Zipcode
           <input
-            id="zipcode"
+            id="zip-code"
             placeholder="5 digits Zipcode"
             value={props.formData.zipcode}
             {...register("zipcode", {
               required: "required",
               valueAsNumber: true,
+              max: 99999,
+              min: 10000,
             })}
             type="number"
             onChange={(e) => {
@@ -99,7 +111,9 @@ const PropertyDetails = (props: Props) => {
             }}
           />
           <p style={{ color: "red" }}>
-            {errors.age?.type === "required" && "Zipcode is required"}
+            {errors.zipcode?.type === "max" && "Zipcode must be 5 digits"}
+            {errors.zipcode?.type === "min" && "Zipcode must be 5 digits"}
+            {errors.zipcode?.type === "required" && "Zipcode is required"}
           </p>
         </label>
       </div>
@@ -107,7 +121,7 @@ const PropertyDetails = (props: Props) => {
         <label>
           Monthly Rent
           <input
-            id="monthlyrent"
+            id="monthly-rent"
             placeholder="most receent monthly income"
             value={props.formData.monthlyrent}
             {...register("monthlyrent", {
@@ -128,7 +142,7 @@ const PropertyDetails = (props: Props) => {
         <label>
           Name of property mgr / landlord
           <input
-            id="landlordName"
+            id="landlord-name"
             placeholder="Name of Landlord"
             {...register("landlordName", {
               required: "required",
