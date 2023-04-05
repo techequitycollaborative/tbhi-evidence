@@ -6,10 +6,13 @@ import ApplicantDetails from "@/components/form/ApplicantDetails";
 import PropertyDetails from "@/components/form/PropertyDetails";
 
 import Start from "@/components/form/start";
+import ApplicationDetails from "@/components/form/ApplicationDetails";
+import AdditionalDetails from "@/components/form/AdditionalDetails";
 
 const Form: NextPage = () => {
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({});
+  const [disableNext, setDisableNext] = useState(false);
 
   function handleBack() {
     if (step > 0) {
@@ -29,16 +32,36 @@ const Form: NextPage = () => {
         return <Start formData={formData} setFormData={setFormData} />;
       case 1:
         return (
-          <ApplicantDetails formData={formData} setFormData={setFormData} />
+          <ApplicantDetails
+            formData={formData}
+            setFormData={setFormData}
+            setDisableNext={setDisableNext}
+          />
         );
       case 2:
         return (
-          <PropertyDetails formData={formData} setFormData={setFormData} />
+          <PropertyDetails
+            formData={formData}
+            setFormData={setFormData}
+            setDisableNext={setDisableNext}
+          />
         );
       case 3:
-        return <div>form step 3 goes here</div>;
+        return (
+          <ApplicationDetails
+            formData={formData}
+            setFormData={setFormData}
+            setDisableNext={setDisableNext}
+          />
+        );
       case 4:
-        return <div>form step 4 goes here</div>;
+        return (
+          <AdditionalDetails
+            formData={formData}
+            setFormData={setFormData}
+            setDisableNext={setDisableNext}
+          />
+        );
       case 5:
         return <div>thank you goes here</div>;
       default:
@@ -53,7 +76,9 @@ const Form: NextPage = () => {
       <div>{formContent(step)}</div>
       <div>
         <button onClick={handleBack}>back</button>
-        <button onClick={handleNext}>next</button>
+        <button disabled={disableNext} onClick={handleNext}>
+          next
+        </button>
       </div>
       <div>
         <p>current form data:</p>

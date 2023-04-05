@@ -1,19 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
   formData: any;
   setFormData: (e: any) => void;
+  setDisableNext: (e: boolean) => void;
 };
 
 const ApplicantDetails = (props: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     mode: "all",
   });
+
+  useEffect(() => {
+    console.log("applicant details errors", errors, isValid);
+    if (isValid) {
+      props.setDisableNext(false);
+    } else {
+      props.setDisableNext(true);
+    }
+  }, [isValid]);
 
   const raceList = [
     "American Indian or Alaska Native",
@@ -36,10 +46,13 @@ const ApplicantDetails = (props: Props) => {
         <label>
           Race
           <select
-            name="race"
             id="race"
             defaultValue="1"
             value={props.formData.race}
+            {...register("race", {
+              required: "required",
+              valueAsNumber: true,
+            })}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -88,7 +101,7 @@ const ApplicantDetails = (props: Props) => {
         <label>
           Yearly Income
           <input
-            id="yearlyIncome"
+            id="yearly-income"
             placeholder="most receent yearly income"
             {...register("yearlyIncome", {
               required: "required",
@@ -109,7 +122,7 @@ const ApplicantDetails = (props: Props) => {
         <label>
           Credit Score
           <input
-            id="creditScore"
+            id="credit-score"
             placeholder="enter a number between 300 - 850"
             value={props.formData.creditScore}
             {...register("creditScore", {
@@ -138,8 +151,10 @@ const ApplicantDetails = (props: Props) => {
           Eviction History
           <select
             placeholder="date off eviction"
-            name="evictionHistory"
-            id="evictionHistory"
+            id="eviction-history"
+            {...register("evictionHistory", {
+              required: "required",
+            })}
             defaultValue="1"
             value={props.formData.evictionHistory}
             onChange={(e) => {
