@@ -1,18 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-type Props = {
-  formData: any;
-  setFormData: (e: any) => void;
-  setDisableNext: (e: boolean) => void;
-};
+import { FormProps } from "../../pages";
 
 /**
  * @returns An object with key/value pairs of errors,
  * where the key matches the name of the input field.
  * If there are no errors, returns an empty object.
  */
-export function validateStep2(formData: any): { [key: string]: string } {
+export function validateProperty(formData: any): { [key: string]: string } {
   // validate state is in list
   // any other address validation?
   // validate montly rent is positive number
@@ -20,23 +15,15 @@ export function validateStep2(formData: any): { [key: string]: string } {
   return {};
 }
 
-const PropertyDetails = (props: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+const PropertyDetails = (props: FormProps) => {
+  const { register, handleSubmit } = useForm({
     mode: "all",
   });
 
   useEffect(() => {
-    console.log("applicant details errors", errors, isValid);
-    if (isValid) {
-      props.setDisableNext(false);
-    } else {
-      props.setDisableNext(true);
-    }
-  }, [isValid]);
+    console.log("applicant details errors", props.errors);
+    props.setDisableNext(props.errors);
+  }, [props.errors]);
 
   return (
     <div>

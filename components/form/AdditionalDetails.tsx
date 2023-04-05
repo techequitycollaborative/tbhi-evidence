@@ -1,44 +1,31 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { validateApplicantDetails } from "./ApplicantDetails";
+import { FormProps } from "../../pages";
+import { validateApplicant } from "./ApplicantDetails";
+import { validateApplication } from "./ApplicationDetails";
+import { validateProperty } from "./PropertyDetails";
 import { validateStart } from "./start";
-import { validateStep2 } from "./step2";
-import { validateStep3 } from "./step3";
-
-type Props = {
-  formData: any;
-  setFormData: (e: any) => void;
-  setDisableNext: (e: boolean) => void;
-};
 
 export function validateAll(formData: any): { [key: string]: string } {
   const errors = {
     ...validateStart(formData),
-    ...validateApplicantDetails(formData),
-    ...validateStep2(formData),
-    ...validateStep3(formData),
+    ...validateApplicant(formData),
+    ...validateProperty(formData),
+    ...validateApplication(formData),
   };
   // any final validation needed?
   return errors;
 }
 
-const AdditionalDetails = (props: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+const AdditionalDetails = (props: FormProps) => {
+  const { register, handleSubmit } = useForm({
     mode: "all",
   });
 
   useEffect(() => {
-    console.log("applicant details errors", errors, isValid);
-    if (isValid) {
-      props.setDisableNext(false);
-    } else {
-      props.setDisableNext(true);
-    }
-  }, [isValid]);
+    console.log("applicant details errors", props.errors);
+    props.setDisableNext(props.errors);
+  }, [props.errors]);
 
   return (
     <div>

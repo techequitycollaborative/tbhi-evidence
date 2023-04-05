@@ -1,24 +1,24 @@
-import ApplicantDetails, { validateApplicantDetails } from "@/components/form/ApplicantDetails";
+import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
 import Start, { validateStart } from "@/components/form/start";
 import { NextPage } from "next";
 import { useState } from "react";
 import AdditionalDetails, { validateAll } from "../components/form/AdditionalDetails";
-import ApplicationDetails, { validateStep3 } from "../components/form/ApplicationDetails";
-import PropertyDetails, { validateStep2 } from "../components/form/PropertyDetails";
+import ApplicationDetails, { validateApplication } from "../components/form/ApplicationDetails";
+import PropertyDetails, { validateProperty } from "../components/form/PropertyDetails";
 
 enum FormPage {
   Start = 0,
   ApplicantDetails = 1,
-  Step2 = 2,
-  Step3 = 3,
-  Step4 = 4,
+  PropertyDetails = 2,
+  ApplicationDetails = 3,
+  AdditionalDetails = 4,
   ThankYou = 5,
 }
 
 export interface FormProps {
   formData: any;
   setFormData: (e: any) => void;
-  errors: any;
+  errors?: any;
   setDisableNext: (e: boolean) => void;
 }
 
@@ -26,7 +26,7 @@ const Form: NextPage = () => {
   const [step, setStep] = useState(FormPage.Start);
   const [formData, setFormData] = useState({});
   const [disableNext, setDisableNext] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState(null as any);
 
   function handleBack() {
     if (step > FormPage.Start) {
@@ -38,7 +38,7 @@ const Form: NextPage = () => {
     if (step < FormPage.ThankYou) {
       const errors = validate(formData);
       if (Object.keys(errors).length === 0) {
-        setErrors({});
+        setErrors(null);
         setStep(step + 1);
       } else {
         setErrors(errors);
@@ -56,12 +56,12 @@ const Form: NextPage = () => {
       case FormPage.Start:
         return validateStart(formData);
       case FormPage.ApplicantDetails:
-        return validateApplicantDetails(formData);
-      case FormPage.Step2:
-        return validateStep2(formData);
-      case FormPage.Step3:
-        return validateStep3(formData);
-      case FormPage.Step4:
+        return validateApplicant(formData);
+      case FormPage.PropertyDetails:
+        return validateProperty(formData);
+      case FormPage.ApplicationDetails:
+        return validateApplication(formData);
+      case FormPage.AdditionalDetails:
         return validateAll(formData);
       default:
         return {};
@@ -80,11 +80,11 @@ const Form: NextPage = () => {
         return <Start {...formProps} />;
       case FormPage.ApplicantDetails:
         return <ApplicantDetails {...formProps} />;
-      case FormPage.Step2:
+      case FormPage.PropertyDetails:
         return <PropertyDetails {...formProps} />;
-      case FormPage.Step3:
+      case FormPage.ApplicationDetails:
         return <ApplicationDetails {...formProps} />;
-      case FormPage.Step4:
+      case FormPage.AdditionalDetails:
         return <AdditionalDetails {...formProps} />;
       case FormPage.ThankYou:
         return <div>thank you goes here</div>;

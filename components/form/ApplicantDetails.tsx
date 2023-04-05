@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FormProps } from "../../pages";
 
@@ -21,7 +21,7 @@ const criminalHistoryTypeList = ["type 1", "type 2", "type 3", "type 4"];
  * where the key matches the name of the input field.
  * If there are no errors, returns an empty object.
  */
-export function validateApplicantDetails(formData: any) {
+export function validateApplicant(formData: any) {
   const errors: any = {};
 
   if (!formData.age) {
@@ -48,13 +48,9 @@ const ApplicantDetails = (props: FormProps) => {
   });
 
   useEffect(() => {
-    console.log("applicant details errors", errors, isValid);
-    if (isValid) {
-      props.setDisableNext(false);
-    } else {
-      props.setDisableNext(true);
-    }
-  }, [isValid]);
+    console.log("applicant details errors", props.errors);
+    props.setDisableNext(props.errors);
+  }, [props.errors]);
 
   return (
     <div>
@@ -109,7 +105,7 @@ const ApplicantDetails = (props: FormProps) => {
               });
             }}
           />
-          <p style={{ color: "red" }}>{props.errors.age || null}</p>
+          <p style={{ color: "red" }}>{props.errors?.age || null}</p>
         </label>
       </div>
       <div className="yearly-income-input">
@@ -154,7 +150,7 @@ const ApplicantDetails = (props: FormProps) => {
               });
             }}
           />
-          <p style={{ color: "red" }}>{props.errors.creditScore || null}</p>
+          <p style={{ color: "red" }}>{props.errors?.creditScore || null}</p>
         </label>
       </div>
       <div className="eviction-history-selection">

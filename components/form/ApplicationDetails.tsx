@@ -1,42 +1,28 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-type Props = {
-  formData: any;
-  setFormData: (e: any) => void;
-  setDisableNext: (e: boolean) => void;
-};
+import { FormProps } from "../../pages";
 
 /**
  * @returns An object with key/value pairs of errors,
  * where the key matches the name of the input field.
  * If there are no errors, returns an empty object.
  */
-export function validateStep3(formData: any): { [key: string]: string } {
+export function validateApplication(formData: any): { [key: string]: string } {
   // validate fee is positive number
   // validate portable screening fee, application method, assessment outcome,
   //   reason for denial are all in list
   return {};
 }
 
-
-const ApplicationDetails = (props: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+const ApplicationDetails = (props: FormProps) => {
+  const { register, handleSubmit } = useForm({
     mode: "all",
   });
 
   useEffect(() => {
-    console.log("applicant details errors", errors, isValid);
-    if (isValid) {
-      props.setDisableNext(false);
-    } else {
-      props.setDisableNext(true);
-    }
-  }, [isValid]);
+    console.log("applicant details errors", props.errors);
+    props.setDisableNext(props.errors);
+  }, [props.errors]);
 
   const applicationMethodList = ["method 1", "method 2", "method 3"];
   const denialReasonList = ["reason 1", "reason 2", "reason 3"];
