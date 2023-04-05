@@ -1,33 +1,50 @@
-import React from "react";
 import { useForm } from "react-hook-form";
+import { FormProps } from "../../pages";
 
-type Props = {
-  formData: any;
-  setFormData: (e: any) => void;
-};
+const raceList = [
+  "American Indian or Alaska Native",
+  "Asian",
+  "Black or African American",
+  "Native Hawaiian or Other Pacific Islander",
+  "White",
+  "Two or More Races",
+  "No Response",
+];
 
-const ApplicantDetails = (props: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+const evictionReasonList = ["reason 1", "reason 2", "reason 3"];
+
+const criminalHistoryTypeList = ["type 1", "type 2", "type 3", "type 4"];
+
+/**
+ * @returns An object with key/value pairs of errors,
+ * where the key matches the name of the input field.
+ * If there are no errors, returns an empty object.
+ */
+export function validateApplicantDetails(formData: any) {
+  const errors: any = {};
+
+  if (!formData.age) {
+    errors.age = "Age is required";
+  } else if (formData.age < 1) {
+    errors.age = "Age must be positive";
+  }
+
+  if (formData.creditScore < 350) {
+    errors.creditScore = "Must be at least 350";
+  } else if (formData.creditScore > 850) {
+    errors.creditScore = "Must be at most 850";
+  }
+  // validate race is in list
+  // validate yearly income is positive number
+  // list of evictions: validate reason is in list, date is in past and correct format
+  // list of criminal convictions: validate type is in list, date is in past and correct format, any name validation?
+  return errors;
+}
+
+const ApplicantDetails = (props: FormProps) => {
+  const { register, handleSubmit } = useForm({
     mode: "all",
   });
-
-  const raceList = [
-    "American Indian or Alaska Native",
-    "Asian",
-    "Black or African American",
-    "Native Hawaiian or Other Pacific Islander",
-    "White",
-    "Two or More Races",
-    "No Response",
-  ];
-
-  const evictionReasonList = ["reason 1", "reason 2", "reason 3"];
-
-  const criminalHistoryTypeList = ["type 1", "type 2", "type 3", "type 4"];
 
   return (
     <div>
@@ -76,9 +93,7 @@ const ApplicantDetails = (props: Props) => {
               });
             }}
           />
-          <p style={{ color: "red" }}>
-            {errors.age?.type === "required" && "Age is required"}
-          </p>
+          <p style={{ color: "red" }}>{props.errors.age || null}</p>
         </label>
       </div>
       <div className="yearly-income-input">
@@ -121,11 +136,7 @@ const ApplicantDetails = (props: Props) => {
               });
             }}
           />
-          <p style={{ color: "red" }}>
-            {errors.creditScore?.type === "min" && "Must be higher than 350"}
-            {errors.creditScore?.type === "max" &&
-              "Must be lower than or equal to 850"}
-          </p>
+          <p style={{ color: "red" }}>{props.errors.creditScore || null}</p>
         </label>
       </div>
       <div className="eviction-history-selection">

@@ -1,7 +1,10 @@
-import ApplicantDetails from '@/components/form/ApplicantDetails';
-import { useState } from 'react';
-
-import Start from '@/components/form/start';
+import ApplicantDetails, { validateApplicantDetails } from "@/components/form/ApplicantDetails";
+import Start, { validateStart } from "@/components/form/start";
+import { validateStep2 } from "@/components/form/step2";
+import { validateStep3 } from "@/components/form/step3";
+import { NextPage } from "next";
+import { useState } from "react";
+import { validateAll } from "../components/form/step4";
 
 enum FormPage {
   Start = 0,
@@ -10,6 +13,12 @@ enum FormPage {
   Step3 = 3,
   Step4 = 4,
   ThankYou = 5,
+}
+
+export interface FormProps {
+  formData: any;
+  setFormData: (e: any) => void;
+  errors: any;
 }
 
 const Form: NextPage = () => {
@@ -26,7 +35,7 @@ const Form: NextPage = () => {
 
   function handleNext() {
     if (step < FormPage.ThankYou) {
-      const errors = findFormErrors();
+      const errors = validate(formData);
       if (Object.keys(errors).length === 0) {
         setErrors({});
         setStep(step + 1);
@@ -37,71 +46,38 @@ const Form: NextPage = () => {
   }
 
   /**
-   * @returns An object with key/value pairs of errors, where the key matches the name of the input field.
-   *         If there are no errors, returns an empty object.
+   * @returns An object with key/value pairs of errors,
+   * where the key matches the name of the input field.
+   * If there are no errors, returns an empty object.
    */
-  function findFormErrors(): Object {
-    function validateStart(): Object {
-      // validate org?
-      // validate email?
-      return {};
-    }
-    function validateApplicationDetails(): Object {
-      // validate race is in list
-      // validate age is postive number
-      // validate yearly income is positive number
-      // validate credit score is in range
-      // list of evictions: validate reason is in list, date is in past and correct format
-      // list of criminal convictions: validate type is in list, date is in past and correct format, any name validation?
-
-      return {};
-    }
-    function validateStep2(): Object {
-      // validate state is in list
-      // any other address validation?
-      // validate montly rent is positive number
-      // validate landlord name is alphabetical with a space (at least first and last name)
-      return {};
-    }
-    function validateStep3(): Object {
-      // validate fee is positive number
-      // validate portable screening fee, application method, assessment outcome,
-      //   reason for denial are all in list
-      return {};
-    }
-    function validateAll(): Object {
-      const errors = {
-        ...validateStart(),
-        ...validateApplicationDetails(),
-        ...validateStep2(),
-        ...validateStep3(),
-      };
-      // any final validation needed?
-      return errors;
-    }
-
+  function validate(formData: Object): Object {
     switch (step) {
       case FormPage.Start:
-        return validateStart();
+        return validateStart(formData);
       case FormPage.ApplicantDetails:
-        return validateApplicationDetails();
+        return validateApplicantDetails(formData);
       case FormPage.Step2:
-        return validateStep2();
+        return validateStep2(formData);
       case FormPage.Step3:
-        return validateStep3();
+        return validateStep3(formData);
       case FormPage.Step4:
-        return validateAll();
-      case FormPage.ThankYou:
+        return validateAll(formData);
+      default:
         return {};
     }
   }
 
   function formContent(step: number) {
+    const formProps: FormProps = {
+      formData,
+      setFormData,
+      errors,
+    };
     switch (step) {
       case FormPage.Start:
-        return <Start formData={formData} setFormData={setFormData} />;
+        return <Start {...formProps} />;
       case FormPage.ApplicantDetails:
-        return <ApplicantDetails formData={formData} setFormData={setFormData} />;
+        return <ApplicantDetails {...formProps} />;
       case FormPage.Step2:
         return <div>form step 2 goes here</div>;
       case FormPage.Step3:
