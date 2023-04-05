@@ -1,10 +1,10 @@
 import ApplicantDetails, { validateApplicantDetails } from "@/components/form/ApplicantDetails";
 import Start, { validateStart } from "@/components/form/start";
-import { validateStep2 } from "@/components/form/step2";
-import { validateStep3 } from "@/components/form/step3";
 import { NextPage } from "next";
 import { useState } from "react";
-import { validateAll } from "../components/form/step4";
+import AdditionalDetails, { validateAll } from "../components/form/AdditionalDetails";
+import ApplicationDetails, { validateStep3 } from "../components/form/ApplicationDetails";
+import PropertyDetails, { validateStep2 } from "../components/form/PropertyDetails";
 
 enum FormPage {
   Start = 0,
@@ -19,12 +19,13 @@ export interface FormProps {
   formData: any;
   setFormData: (e: any) => void;
   errors: any;
+  setDisableNext: (e: boolean) => void;
 }
 
 const Form: NextPage = () => {
   const [step, setStep] = useState(FormPage.Start);
   const [formData, setFormData] = useState({});
-  // move errors into
+  const [disableNext, setDisableNext] = useState(false);
   const [errors, setErrors] = useState({});
 
   function handleBack() {
@@ -72,6 +73,7 @@ const Form: NextPage = () => {
       formData,
       setFormData,
       errors,
+      setDisableNext,
     };
     switch (step) {
       case FormPage.Start:
@@ -79,11 +81,11 @@ const Form: NextPage = () => {
       case FormPage.ApplicantDetails:
         return <ApplicantDetails {...formProps} />;
       case FormPage.Step2:
-        return <div>form step 2 goes here</div>;
+        return <PropertyDetails {...formProps} />;
       case FormPage.Step3:
-        return <div>form step 3 goes here</div>;
+        return <ApplicationDetails {...formProps} />;
       case FormPage.Step4:
-        return <div>form step 4 goes here</div>;
+        return <AdditionalDetails {...formProps} />;
       case FormPage.ThankYou:
         return <div>thank you goes here</div>;
     }
@@ -96,7 +98,9 @@ const Form: NextPage = () => {
       <div>{formContent(step)}</div>
       <div>
         <button onClick={handleBack}>back</button>
-        <button onClick={handleNext}>next</button>
+        <button disabled={disableNext} onClick={handleNext}>
+          next
+        </button>
       </div>
       <div>
         <p>current form data:</p>

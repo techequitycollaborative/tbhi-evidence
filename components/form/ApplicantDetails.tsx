@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FormProps } from "../../pages";
 
@@ -46,15 +47,29 @@ const ApplicantDetails = (props: FormProps) => {
     mode: "all",
   });
 
+  useEffect(() => {
+    console.log("applicant details errors", errors, isValid);
+    if (isValid) {
+      props.setDisableNext(false);
+    } else {
+      props.setDisableNext(true);
+    }
+  }, [isValid]);
+
   return (
     <div>
+      <p>Applicant Details</p>
       <div className="race-selection">
         <label>
           Race
           <select
-            name="race"
             id="race"
             defaultValue="1"
+            value={props.formData.race}
+            {...register("race", {
+              required: "required",
+              valueAsNumber: true,
+            })}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -86,6 +101,7 @@ const ApplicantDetails = (props: FormProps) => {
               valueAsNumber: true,
             })}
             type="number"
+            value={props.formData.age}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -100,13 +116,14 @@ const ApplicantDetails = (props: FormProps) => {
         <label>
           Yearly Income
           <input
-            id="yearlyIncome"
+            id="yearly-income"
             placeholder="most receent yearly income"
             {...register("yearlyIncome", {
               required: "required",
               valueAsNumber: true,
             })}
             type="number"
+            value={props.formData.yearlyIncome}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -120,8 +137,9 @@ const ApplicantDetails = (props: FormProps) => {
         <label>
           Credit Score
           <input
-            id="creditScore"
+            id="credit-score"
             placeholder="enter a number between 300 - 850"
+            value={props.formData.creditScore}
             {...register("creditScore", {
               required: "required",
               valueAsNumber: true,
@@ -144,9 +162,12 @@ const ApplicantDetails = (props: FormProps) => {
           Eviction History
           <select
             placeholder="date off eviction"
-            name="evictionHistory"
-            id="evictionHistory"
+            id="eviction-history"
+            {...register("evictionHistory", {
+              required: "required",
+            })}
             defaultValue="1"
+            value={props.formData.evictionHistory}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -176,6 +197,7 @@ const ApplicantDetails = (props: FormProps) => {
             placeholder="date of eviction"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
+            value={props.formData.evictionDate}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -192,6 +214,7 @@ const ApplicantDetails = (props: FormProps) => {
             name="criminalHistoryType"
             id="criminal-history-type"
             defaultValue="1"
+            value={props.formData.criminalHistoryType}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -217,6 +240,7 @@ const ApplicantDetails = (props: FormProps) => {
               valueAsDate: true,
             })}
             type="text"
+            value={props.formData.convictionDate}
             placeholder="date of conviction"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
@@ -234,6 +258,7 @@ const ApplicantDetails = (props: FormProps) => {
               required: "required",
             })}
             type="text"
+            value={props.formData.offenseName}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
