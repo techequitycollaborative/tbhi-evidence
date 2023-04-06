@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FormProps } from "../../pages";
 
@@ -18,11 +17,6 @@ const ApplicationDetails = (props: FormProps) => {
   const { register, handleSubmit } = useForm({
     mode: "all",
   });
-
-  useEffect(() => {
-    console.log("applicant details errors", props.errors);
-    props.setDisableNext(props.errors);
-  }, [props.errors]);
 
   const applicationMethodList = ["method 1", "method 2", "method 3"];
   const denialReasonList = ["reason 1", "reason 2", "reason 3"];

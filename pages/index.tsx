@@ -1,7 +1,7 @@
 import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
 import Start, { validateStart } from "@/components/form/start";
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdditionalDetails, { validateAll } from "../components/form/AdditionalDetails";
 import ApplicationDetails, { validateApplication } from "../components/form/ApplicationDetails";
 import PropertyDetails, { validateProperty } from "../components/form/PropertyDetails";
@@ -19,13 +19,11 @@ export interface FormProps {
   formData: any;
   setFormData: (e: any) => void;
   errors?: any;
-  setDisableNext: (e: boolean) => void;
 }
 
 const Form: NextPage = () => {
   const [step, setStep] = useState(FormPage.Start);
   const [formData, setFormData] = useState({});
-  const [disableNext, setDisableNext] = useState(false);
   const [errors, setErrors] = useState(null as any);
 
   function handleBack() {
@@ -45,6 +43,11 @@ const Form: NextPage = () => {
       }
     }
   }
+
+  useEffect(() => {
+    const errors = validate(formData);
+    setErrors(Object.keys(errors).length === 0 ? null : errors);
+  }, [formData]);
 
   /**
    * @returns An object with key/value pairs of errors,
@@ -73,7 +76,6 @@ const Form: NextPage = () => {
       formData,
       setFormData,
       errors,
-      setDisableNext,
     };
     switch (step) {
       case FormPage.Start:
@@ -98,7 +100,7 @@ const Form: NextPage = () => {
       <div>{formContent(step)}</div>
       <div>
         <button onClick={handleBack}>back</button>
-        <button disabled={disableNext} onClick={handleNext}>
+        <button disabled={errors} onClick={handleNext}>
           next
         </button>
       </div>

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FormProps } from "../../pages";
 
@@ -19,11 +18,6 @@ const PropertyDetails = (props: FormProps) => {
   const { register, handleSubmit } = useForm({
     mode: "all",
   });
-
-  useEffect(() => {
-    console.log("applicant details errors", props.errors);
-    props.setDisableNext(props.errors);
-  }, [props.errors]);
 
   return (
     <div>
