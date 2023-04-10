@@ -32,9 +32,6 @@ const AdditionalDetails = (props: FormProps) => {
             id="additional-context-notes"
             placeholder="additionalContextNotes"
             value={props.formData.additionalContextNotes}
-            {...register("additionalContextNotes", {
-              required: "required",
-            })}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,

@@ -23,21 +23,66 @@ const criminalHistoryTypeList = ["type 1", "type 2", "type 3", "type 4"];
 export function validateApplicant(formData: any) {
   const errors: any = {};
 
-  if (!formData.age) {
-    errors.age = "Age is required";
-  } else if (formData.age < 1) {
-    errors.age = "Age must be positive";
+  if (!formData.race) {
+    errors.race = "Race is required";
+  } else if (!raceList.includes(formData.race)) {
+    errors.race = "Race must be from provided list";
   }
 
-  if (formData.creditScore < 350) {
-    errors.creditScore = "Must be at least 350";
-  } else if (formData.creditScore > 850) {
-    errors.creditScore = "Must be at most 850";
+  if (!formData.age) {
+    errors.age = "Age is required";
+  } else if (!parseInt(formData.age) || parseInt(formData.age) < 1) {
+    errors.age = "Age must be a positive number";
   }
-  // validate race is in list
-  // validate yearly income is positive number
-  // list of evictions: validate reason is in list, date is in past and correct format
-  // list of criminal convictions: validate type is in list, date is in past and correct format, any name validation?
+
+  if (!formData.yearlyIncome) {
+    errors.yearlyIncome = "Yearly income is required";
+  } else if (
+    (!parseInt(formData.yearlyIncome) && parseInt(formData.yearlyIncome) !== 0) ||
+    parseInt(formData.yearlyIncome) < 0
+  ) {
+    errors.yearlyIncome = "Yearly income must be a non-negative number.";
+  }
+
+  if (!formData.creditScore) {
+    errors.creditScore = "Credit score is required";
+  } else if (
+    !parseInt(formData.creditScore) ||
+    parseInt(formData.creditScore) < 350 ||
+    parseInt(formData.creditScore) > 850
+  ) {
+    errors.creditScore = "Credit score must be a number between 350 and 850";
+  }
+
+  if (formData.evictionHistory || formData.evictionDate) {
+    if (!formData.evictionHistory || !formData.evictionDate) {
+      errors.evictionHistory = "Must provide eviction reason with date.";
+    } else if (!evictionReasonList.includes(formData.evictionHistory)) {
+      errors.evictionHistory = "Eviction history reason must be from provided list";
+    } else if (new Date(formData.evictionDate).toString() === "Invalid Date") {
+      errors.evictionDate = "Eviction date must be in correct format (MM-DD-YYYY).";
+    } else if (
+      new Date(formData.evictionDate).setUTCHours(0, 0, 0, 0) >= new Date().setUTCHours(0, 0, 0, 0)
+    ) {
+      errors.evictionDate = "Eviction date must be in the past.";
+    }
+  }
+
+  if (formData.criminalHistoryType || formData.convictionDate || formData.offenseName) {
+    if (!formData.criminalHistoryType || !formData.convictionDate || !formData.offenseName) {
+      errors.evictionHistory = "Must provide criminal history type with date and offense name.";
+    } else if (!criminalHistoryTypeList.includes(formData.criminalHistoryType)) {
+      errors.evictionHistory = "Criminal history type must be from provided list";
+    } else if (new Date(formData.convictionDate).toString() === "Invalid Date") {
+      errors.convictionDate = "Criminal offense date must be in correct format (MM-DD-YYYY).";
+    } else if (
+      new Date(formData.convictionDate).setUTCHours(0, 0, 0, 0) >=
+      new Date().setUTCHours(0, 0, 0, 0)
+    ) {
+      errors.convictionDate = "Criminal offense date must be in the past.";
+    }
+  }
+
   return errors;
 }
 
@@ -56,10 +101,6 @@ const ApplicantDetails = (props: FormProps) => {
             id="race"
             defaultValue="1"
             value={props.formData.race}
-            {...register("race", {
-              required: "required",
-              valueAsNumber: true,
-            })}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -78,6 +119,7 @@ const ApplicantDetails = (props: FormProps) => {
               );
             })}
           </select>
+          <p style={{ color: "red" }}>{props.errors?.race || null}</p>
         </label>
       </div>
       <div className="age-input">
@@ -86,10 +128,6 @@ const ApplicantDetails = (props: FormProps) => {
           <input
             id="age"
             placeholder="applicant's age"
-            {...register("age", {
-              required: "required",
-              valueAsNumber: true,
-            })}
             type="number"
             value={props.formData.age}
             onChange={(e) => {
@@ -107,11 +145,7 @@ const ApplicantDetails = (props: FormProps) => {
           Yearly Income
           <input
             id="yearly-income"
-            placeholder="most receent yearly income"
-            {...register("yearlyIncome", {
-              required: "required",
-              valueAsNumber: true,
-            })}
+            placeholder="most recent yearly income"
             type="number"
             value={props.formData.yearlyIncome}
             onChange={(e) => {
@@ -121,6 +155,7 @@ const ApplicantDetails = (props: FormProps) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>{props.errors?.yearlyIncome || null}</p>
         </label>
       </div>
       <div className="credit-score-input">
@@ -130,12 +165,6 @@ const ApplicantDetails = (props: FormProps) => {
             id="credit-score"
             placeholder="enter a number between 300 - 850"
             value={props.formData.creditScore}
-            {...register("creditScore", {
-              required: "required",
-              valueAsNumber: true,
-              max: 850,
-              min: 350,
-            })}
             type="number"
             onChange={(e) => {
               props.setFormData({
@@ -151,11 +180,8 @@ const ApplicantDetails = (props: FormProps) => {
         <label>
           Eviction History
           <select
-            placeholder="date off eviction"
+            placeholder="date of eviction"
             id="eviction-history"
-            {...register("evictionHistory", {
-              required: "required",
-            })}
             defaultValue="1"
             value={props.formData.evictionHistory}
             onChange={(e) => {
@@ -179,10 +205,6 @@ const ApplicantDetails = (props: FormProps) => {
           </select>
           <input
             id="eviction-date"
-            {...register("evictionDate", {
-              required: "required",
-              valueAsDate: true,
-            })}
             type="text"
             placeholder="date of eviction"
             onFocus={(e) => (e.target.type = "date")}
@@ -195,6 +217,9 @@ const ApplicantDetails = (props: FormProps) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>
+            {props.errors?.evictionHistory || props.errors?.evictionDate || null}
+          </p>
         </label>
       </div>
       <div>
@@ -225,10 +250,6 @@ const ApplicantDetails = (props: FormProps) => {
           </select>
           <input
             id="conviction-date"
-            {...register("convictionDate", {
-              required: "required",
-              valueAsDate: true,
-            })}
             type="text"
             value={props.formData.convictionDate}
             placeholder="date of conviction"
@@ -244,9 +265,6 @@ const ApplicantDetails = (props: FormProps) => {
           <input
             id="offense-name"
             placeholder="name of offense"
-            {...register("offenseName", {
-              required: "required",
-            })}
             type="text"
             value={props.formData.offenseName}
             onChange={(e) => {
@@ -256,6 +274,12 @@ const ApplicantDetails = (props: FormProps) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>
+            {props.errors?.criminalHistoryType ||
+              props.errors?.convictionDate ||
+              props.errors?.offenseName ||
+              null}
+          </p>
         </label>
       </div>
     </div>

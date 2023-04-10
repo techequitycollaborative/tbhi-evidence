@@ -7,12 +7,12 @@ import ApplicationDetails, { validateApplication } from "../components/form/Appl
 import PropertyDetails, { validateProperty } from "../components/form/PropertyDetails";
 
 enum FormPage {
-  Start = 0,
-  ApplicantDetails = 1,
-  PropertyDetails = 2,
-  ApplicationDetails = 3,
-  AdditionalDetails = 4,
-  ThankYou = 5,
+  Start,
+  ApplicantDetails,
+  PropertyDetails,
+  ApplicationDetails,
+  AdditionalDetails,
+  ThankYou,
 }
 
 export interface FormProps {
@@ -50,17 +50,12 @@ const Form: NextPage = () => {
     }
   }
 
-  useEffect(() => {
-    const errors = validate(formData);
-    setErrors(Object.keys(errors).length === 0 ? null : errors);
-  }, [formData]);
-
   /**
    * @returns An object with key/value pairs of errors,
    * where the key matches the name of the input field.
    * If there are no errors, returns an empty object.
    */
-  function validate(formData: Object): Object {
+  function validate(formData: any): Object {
     switch (step) {
       case FormPage.Start:
         return validateStart(formData);
