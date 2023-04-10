@@ -25,6 +25,11 @@ const Form: NextPage = () => {
   const [step, setStep] = useState(FormPage.Start);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState(null as any);
+  const [nextDisabled, setNextDisabled] = useState(false);
+
+  useEffect(() => {
+    setNextDisabled(false);
+  }, [formData]);
 
   function handleBack() {
     if (step > FormPage.Start) {
@@ -40,6 +45,7 @@ const Form: NextPage = () => {
         setStep(step + 1);
       } else {
         setErrors(errors);
+        setNextDisabled(true);
       }
     }
   }
@@ -100,7 +106,7 @@ const Form: NextPage = () => {
       <div>{formContent(step)}</div>
       <div>
         <button onClick={handleBack}>back</button>
-        <button disabled={errors} onClick={handleNext}>
+        <button disabled={nextDisabled} onClick={handleNext}>
           next
         </button>
       </div>
