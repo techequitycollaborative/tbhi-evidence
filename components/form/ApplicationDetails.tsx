@@ -1,32 +1,64 @@
-import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { FormProps } from "../../pages";
 
-type Props = {
-  formData: any;
-  setFormData: (e: any) => void;
-  setDisableNext: (e: boolean) => void;
-};
+const portableScreeningFeeAnswerList = ["yes", "no"];
+const applicationMethodList = ["method 1", "method 2", "method 3"];
+const assessmentOutcomeList = ["accepted", "denied"];
+const denialReasonList = ["reason 1", "reason 2", "reason 3, other"];
 
-const ApplicationDetails = (props: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+/**
+ * @returns An object with key/value pairs of errors,
+ * where the key matches the name of the input field.
+ * If there are no errors, returns an empty object.
+ */
+export function validateApplication(formData: any): { [key: string]: string } {
+  const errors: any = {};
+
+  if (!formData.screeningCompanyName) {
+    errors.screeningCompanyName = "Screening company name is required";
+  }
+
+  if (!formData.screeningFee) {
+    errors.screeningFee = "Screening fee is required";
+  } else if (!parseInt(formData.screeningFee) || parseInt(formData.screeningFee) < 0) {
+    errors.screeningFee = "Screening fee must be a non-negative number.";
+  }
+
+  if (!formData.portableScreeningFee) {
+    errors.portableScreeningFee = "Portable screening fee answer is required";
+  } else if (!portableScreeningFeeAnswerList.includes(formData.portableScreeningFee)) {
+    errors.portableScreeningFee = "Portable screening fee answer must be from provided list";
+  }
+
+  if (!formData.applicationMethod) {
+    errors.applicationMethod = "Application method is required";
+  } else if (!applicationMethodList.includes(formData.applicationMethod)) {
+    errors.applicationMethod = "Application method must be from provided list";
+  }
+
+  if (!formData.assessmentOutcome) {
+    errors.assessmentOutcome = "Assessment outcome answer is required";
+  } else if (!assessmentOutcomeList.includes(formData.assessmentOutcome)) {
+    errors.assessmentOutcome = "Assessment outcome answer must be from provided list";
+  }
+
+  if (formData.assessmentOutcome === "denied") {
+    if (!formData.denialReason) {
+      errors.denialReason = "Denial reason is required";
+    } else if (!denialReasonList.includes(formData.denialReason)) {
+      errors.denialReason = "Denial reason must be from provided list";
+    } else if (formData.denialReason === "other" && !formData.denialReasonOther) {
+      errors.denialReasonOther = "Denial reason explanation is required";
+    }
+  }
+
+  return errors;
+}
+
+const ApplicationDetails = (props: FormProps) => {
+  const { register, handleSubmit } = useForm({
     mode: "all",
   });
-
-  useEffect(() => {
-    console.log("applicant details errors", errors, isValid);
-    if (isValid) {
-      props.setDisableNext(false);
-    } else {
-      props.setDisableNext(true);
-    }
-  }, [isValid]);
-
-  const applicationMethodList = ["method 1", "method 2", "method 3"];
-  const denialReasonList = ["reason 1", "reason 2", "reason 3"];
 
   return (
     <div>
@@ -37,9 +69,6 @@ const ApplicationDetails = (props: Props) => {
           <input
             id="screening-company-name"
             placeholder="enter name"
-            {...register("screeningCompanyName", {
-              required: "required",
-            })}
             type="text"
             value={props.formData.screeningCompanyName}
             onChange={(e) => {
@@ -49,6 +78,7 @@ const ApplicationDetails = (props: Props) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>{props.errors?.screeningCompanyName || null}</p>
         </label>
       </div>
       <div className="screning-fee-input">
@@ -57,10 +87,6 @@ const ApplicationDetails = (props: Props) => {
           <input
             id="screening-fee"
             placeholder="enter fee"
-            {...register("screeningFee", {
-              required: "required",
-              valueAsNumber: true,
-            })}
             type="number"
             value={props.formData.screeningFee}
             onChange={(e) => {
@@ -70,9 +96,7 @@ const ApplicationDetails = (props: Props) => {
               });
             }}
           />
-          <p style={{ color: "red" }}>
-            {errors.age?.type === "required" && "screening fee is required"}
-          </p>
+          <p style={{ color: "red" }}>{props.errors?.screeningFee || null}</p>
         </label>
       </div>
 
@@ -83,10 +107,6 @@ const ApplicationDetails = (props: Props) => {
             id="portable-screening-fee"
             defaultValue="placeholder"
             value={props.formData.portableScreeningFee}
-            {...register("portableScreeningFee", {
-              required: "required",
-              valueAsNumber: true,
-            })}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -97,9 +117,15 @@ const ApplicationDetails = (props: Props) => {
             <option value="placeholder" disabled>
               Yes/No
             </option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            {portableScreeningFeeAnswerList.map((el) => {
+              return (
+                <option key={el} value={el}>
+                  {el.charAt(0).toLocaleUpperCase() + el.substring(1)}
+                </option>
+              );
+            })}
           </select>
+          <p style={{ color: "red" }}>{props.errors?.portableScreeningFee || null}</p>
         </label>
       </div>
       <div className="application-method">
@@ -109,10 +135,6 @@ const ApplicationDetails = (props: Props) => {
             id="application-method"
             defaultValue="placeholder"
             value={props.formData.applicationMethod}
-            {...register("applicationMethod", {
-              required: "required",
-              valueAsNumber: true,
-            })}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -131,6 +153,7 @@ const ApplicationDetails = (props: Props) => {
               );
             })}
           </select>
+          <p style={{ color: "red" }}>{props.errors?.applicationMethod || null}</p>
         </label>
       </div>
       <div>
@@ -141,9 +164,6 @@ const ApplicationDetails = (props: Props) => {
               id="assessment-outcome"
               defaultValue="placeholder"
               value={props.formData.assessmentOutcome}
-              {...register("assessmentOutcome", {
-                required: "required",
-              })}
               onChange={(e) => {
                 props.setFormData({
                   ...props.formData,
@@ -154,17 +174,19 @@ const ApplicationDetails = (props: Props) => {
               <option value="placeholder" disabled>
                 Accepted/Denied
               </option>
-              <option value="accepted">Accepted</option>
-              <option value="denied">Denied</option>
+              {assessmentOutcomeList.map((el) => {
+                return (
+                  <option key={el} value={el}>
+                    {el.charAt(0).toLocaleUpperCase() + el.substring(1)}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <div>
             <input
               id="assessment-outcome-details"
               placeholder="enter details if applicable"
-              {...register("assessmentOutcomeDetails", {
-                required: "required",
-              })}
               type="text"
               value={props.formData.assessmentOutcomeDetails}
               onChange={(e) => {
@@ -175,6 +197,9 @@ const ApplicationDetails = (props: Props) => {
               }}
             />
           </div>
+          <p style={{ color: "red" }}>
+            {props.errors?.assessmentOutcome || props.errors?.assessmentOutcomeDetails || null}
+          </p>
         </label>
       </div>
       <div>
@@ -185,9 +210,6 @@ const ApplicationDetails = (props: Props) => {
               id="denial-reason"
               defaultValue="placeholder"
               value={props.formData.denialReason}
-              {...register("denialReason", {
-                required: "required",
-              })}
               onChange={(e) => {
                 props.setFormData({
                   ...props.formData,
@@ -211,9 +233,6 @@ const ApplicationDetails = (props: Props) => {
             <input
               id="other-denial-reason"
               placeholder="if other, explain here"
-              {...register("otherDenialReason", {
-                required: "required",
-              })}
               type="text"
               value={props.formData.otherDenialReason}
               onChange={(e) => {
@@ -224,6 +243,9 @@ const ApplicationDetails = (props: Props) => {
               }}
             />
           </div>
+          <p style={{ color: "red" }}>
+            {props.errors?.denialReason || props.errors?.otherDenialReason || null}
+          </p>
         </label>
       </div>
     </div>

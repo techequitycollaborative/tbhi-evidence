@@ -1,29 +1,49 @@
-import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { FormProps } from "../../pages";
 
-type Props = {
-  formData: any;
-  setFormData: (e: any) => void;
-  setDisableNext: (e: boolean) => void;
-};
+/**
+ * @returns An object with key/value pairs of errors,
+ * where the key matches the name of the input field.
+ * If there are no errors, returns an empty object.
+ */
+export function validateProperty(formData: any): { [key: string]: string } {
+  const errors = {} as any;
 
-const PropertyDetails = (props: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+  // any other address validation?
+  if (!formData.street) {
+    errors.street = "Street is required";
+  }
+  if (!formData.unit) {
+    errors.unit = "Unit is required";
+  }
+  if (!formData.city) {
+    errors.city = "City is required";
+  }
+
+  if (!formData.zipcode) {
+    errors.zipcode = "Zipcode is required";
+  } else if (formData.zipcode.length !== 5 || !parseInt(formData.zipcode)) {
+    errors.zipcode = "Zipcode must be a 5-digit number";
+  }
+
+  if (!formData.monthlyRent) {
+    errors.monthlyRent = "Monthly rent is required";
+  } else if (!parseInt(formData.monthlyRent) || parseInt(formData.monthlyRent) < 0) {
+    errors.monthlyRent = "Monthly rent must be a non-negative number.";
+  }
+
+  // checking for first and last name at least
+  if (!formData.landlordName || formData.landlordName.split(" ").length < 2) {
+    errors.landlordName = "Landlord name is required";
+  }
+
+  return errors;
+}
+
+const PropertyDetails = (props: FormProps) => {
+  const { register, handleSubmit } = useForm({
     mode: "all",
   });
-
-  useEffect(() => {
-    console.log("applicant details errors", errors, isValid);
-    if (isValid) {
-      props.setDisableNext(false);
-    } else {
-      props.setDisableNext(true);
-    }
-  }, [isValid]);
 
   return (
     <div>
@@ -35,9 +55,6 @@ const PropertyDetails = (props: Props) => {
             id="street"
             placeholder="Street"
             value={props.formData.street}
-            {...register("street", {
-              required: "required",
-            })}
             type="text"
             onChange={(e) => {
               props.setFormData({
@@ -46,6 +63,7 @@ const PropertyDetails = (props: Props) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>{props.errors?.street || null}</p>
         </label>
       </div>
       <div>
@@ -55,9 +73,6 @@ const PropertyDetails = (props: Props) => {
             id="unit"
             placeholder="Unit"
             value={props.formData.unit}
-            {...register("unit", {
-              required: "required",
-            })}
             type="text"
             onChange={(e) => {
               props.setFormData({
@@ -66,6 +81,7 @@ const PropertyDetails = (props: Props) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>{props.errors?.unit || null}</p>
         </label>
       </div>
       <div>
@@ -75,9 +91,6 @@ const PropertyDetails = (props: Props) => {
             id="city"
             placeholder="City"
             value={props.formData.city}
-            {...register("city", {
-              required: "required",
-            })}
             type="text"
             onChange={(e) => {
               props.setFormData({
@@ -86,6 +99,7 @@ const PropertyDetails = (props: Props) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>{props.errors?.city || null}</p>
         </label>
       </div>
 
@@ -96,12 +110,6 @@ const PropertyDetails = (props: Props) => {
             id="zip-code"
             placeholder="5 digits Zipcode"
             value={props.formData.zipcode}
-            {...register("zipcode", {
-              required: "required",
-              valueAsNumber: true,
-              max: 99999,
-              min: 10000,
-            })}
             type="number"
             onChange={(e) => {
               props.setFormData({
@@ -110,11 +118,7 @@ const PropertyDetails = (props: Props) => {
               });
             }}
           />
-          <p style={{ color: "red" }}>
-            {errors.zipcode?.type === "max" && "Zipcode must be 5 digits"}
-            {errors.zipcode?.type === "min" && "Zipcode must be 5 digits"}
-            {errors.zipcode?.type === "required" && "Zipcode is required"}
-          </p>
+          <p style={{ color: "red" }}>{props.errors?.zipcode || null}</p>
         </label>
       </div>
       <div className="monthly-rent-input">
@@ -123,19 +127,16 @@ const PropertyDetails = (props: Props) => {
           <input
             id="monthly-rent"
             placeholder="most receent monthly income"
-            value={props.formData.monthlyrent}
-            {...register("monthlyrent", {
-              required: "required",
-              valueAsNumber: true,
-            })}
+            value={props.formData.monthlyRent}
             type="number"
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
-                monthlyrent: e.target.value,
+                monthlyRent: e.target.value,
               });
             }}
           />
+          <p style={{ color: "red" }}>{props.errors?.monthlyRent || null}</p>
         </label>
       </div>
       <div className="landlord-name-input">
@@ -144,10 +145,6 @@ const PropertyDetails = (props: Props) => {
           <input
             id="landlord-name"
             placeholder="Name of Landlord"
-            {...register("landlordName", {
-              required: "required",
-              valueAsNumber: true,
-            })}
             value={props.formData.landlordName}
             type="text"
             onChange={(e) => {
@@ -157,6 +154,7 @@ const PropertyDetails = (props: Props) => {
               });
             }}
           />
+          <p style={{ color: "red" }}>{props.errors?.landlordName || null}</p>
         </label>
       </div>
     </div>

@@ -1,71 +1,96 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "@/styles/Home.module.css";
-import { useState } from "react";
-import ApplicantDetails from "@/components/form/ApplicantDetails";
-import PropertyDetails from "@/components/form/PropertyDetails";
+import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
+import Start, { validateStart } from "@/components/form/start";
+import { NextPage } from "next";
+import { useEffect, useState } from "react";
+import AdditionalDetails, { validateAll } from "../components/form/AdditionalDetails";
+import ApplicationDetails, { validateApplication } from "../components/form/ApplicationDetails";
+import PropertyDetails, { validateProperty } from "../components/form/PropertyDetails";
 
-import Start from "@/components/form/start";
-import ApplicationDetails from "@/components/form/ApplicationDetails";
-import AdditionalDetails from "@/components/form/AdditionalDetails";
+enum FormPage {
+  Start,
+  ApplicantDetails,
+  PropertyDetails,
+  ApplicationDetails,
+  AdditionalDetails,
+  ThankYou,
+}
+
+export interface FormProps {
+  formData: any;
+  setFormData: (e: any) => void;
+  errors?: any;
+}
 
 const Form: NextPage = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(FormPage.Start);
   const [formData, setFormData] = useState({});
-  const [disableNext, setDisableNext] = useState(false);
+  const [errors, setErrors] = useState(null as any);
+  const [nextDisabled, setNextDisabled] = useState(false);
+
+  useEffect(() => {
+    setNextDisabled(false);
+  }, [formData]);
 
   function handleBack() {
-    if (step > 0) {
+    if (step > FormPage.Start) {
       setStep(step - 1);
     }
   }
 
   function handleNext() {
-    if (step < 5) {
-      setStep(step + 1);
+    if (step < FormPage.ThankYou) {
+      const errors = validate(formData);
+      if (Object.keys(errors).length === 0) {
+        setErrors(null);
+        setStep(step + 1);
+      } else {
+        setErrors(errors);
+        setNextDisabled(true);
+      }
+    }
+  }
+
+  /**
+   * @returns An object with key/value pairs of errors,
+   * where the key matches the name of the input field.
+   * If there are no errors, returns an empty object.
+   */
+  function validate(formData: any): Object {
+    switch (step) {
+      case FormPage.Start:
+        return validateStart(formData);
+      case FormPage.ApplicantDetails:
+        return validateApplicant(formData);
+      case FormPage.PropertyDetails:
+        return validateProperty(formData);
+      case FormPage.ApplicationDetails:
+        return validateApplication(formData);
+      case FormPage.AdditionalDetails:
+        return validateAll(formData);
+      default:
+        return {};
     }
   }
 
   function formContent(step: number) {
+    const formProps: FormProps = {
+      formData,
+      setFormData,
+      errors,
+    };
     switch (step) {
-      case 0:
-        return <Start formData={formData} setFormData={setFormData} />;
-      case 1:
-        return (
-          <ApplicantDetails
-            formData={formData}
-            setFormData={setFormData}
-            setDisableNext={setDisableNext}
-          />
-        );
-      case 2:
-        return (
-          <PropertyDetails
-            formData={formData}
-            setFormData={setFormData}
-            setDisableNext={setDisableNext}
-          />
-        );
-      case 3:
-        return (
-          <ApplicationDetails
-            formData={formData}
-            setFormData={setFormData}
-            setDisableNext={setDisableNext}
-          />
-        );
-      case 4:
-        return (
-          <AdditionalDetails
-            formData={formData}
-            setFormData={setFormData}
-            setDisableNext={setDisableNext}
-          />
-        );
-      case 5:
+      case FormPage.Start:
+        return <Start {...formProps} />;
+      case FormPage.ApplicantDetails:
+        return <ApplicantDetails {...formProps} />;
+      case FormPage.PropertyDetails:
+        return <PropertyDetails {...formProps} />;
+      case FormPage.ApplicationDetails:
+        return <ApplicationDetails {...formProps} />;
+      case FormPage.AdditionalDetails:
+        return <AdditionalDetails {...formProps} />;
+      case FormPage.ThankYou:
         return <div>thank you goes here</div>;
-      default:
-        return <Start formData={formData} setFormData={setFormData} />;
     }
   }
 
@@ -76,7 +101,7 @@ const Form: NextPage = () => {
       <div>{formContent(step)}</div>
       <div>
         <button onClick={handleBack}>back</button>
-        <button disabled={disableNext} onClick={handleNext}>
+        <button disabled={nextDisabled} onClick={handleNext}>
           next
         </button>
       </div>

@@ -1,29 +1,25 @@
-import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { FormProps } from "../../pages";
+import { validateApplicant } from "./ApplicantDetails";
+import { validateApplication } from "./ApplicationDetails";
+import { validateProperty } from "./PropertyDetails";
+import { validateStart } from "./start";
 
-type Props = {
-  formData: any;
-  setFormData: (e: any) => void;
-  setDisableNext: (e: boolean) => void;
-};
+export function validateAll(formData: any): { [key: string]: string } {
+  const errors = {
+    ...validateStart(formData),
+    ...validateApplicant(formData),
+    ...validateProperty(formData),
+    ...validateApplication(formData),
+  };
+  // any final validation needed?
+  return errors;
+}
 
-const AdditionalDetails = (props: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+const AdditionalDetails = (props: FormProps) => {
+  const { register, handleSubmit } = useForm({
     mode: "all",
   });
-
-  useEffect(() => {
-    console.log("applicant details errors", errors, isValid);
-    if (isValid) {
-      props.setDisableNext(false);
-    } else {
-      props.setDisableNext(true);
-    }
-  }, [isValid]);
 
   return (
     <div>
@@ -36,9 +32,6 @@ const AdditionalDetails = (props: Props) => {
             id="additional-context-notes"
             placeholder="additionalContextNotes"
             value={props.formData.additionalContextNotes}
-            {...register("additionalContextNotes", {
-              required: "required",
-            })}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
