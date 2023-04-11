@@ -6,6 +6,9 @@ import AdditionalDetails, { validateAll } from "../components/form/AdditionalDet
 import ApplicationDetails, { validateApplication } from "../components/form/ApplicationDetails";
 import PropertyDetails, { validateProperty } from "../components/form/PropertyDetails";
 
+// for local dev environment
+const SAVE_RECORD_URL = 'http://localhost:8000/saveRecord';
+
 enum FormPage {
   Start,
   ApplicantDetails,
@@ -72,6 +75,31 @@ const Form: NextPage = () => {
     }
   }
 
+  function handleSubmit() {
+    try {
+      const r = fetch(SAVE_RECORD_URL, {
+        method: 'POST',
+        headers : {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      r.then(response => {
+        if (response.ok) {
+          console.log('submit succeeded');
+        }
+        else {
+          console.log('submit failed');
+        }
+      });
+
+      setStep(step + 1);
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   function formContent(step: number) {
     const formProps: FormProps = {
       formData,
@@ -99,12 +127,26 @@ const Form: NextPage = () => {
       <h1>header goes here</h1>
       <p>form nav goes here</p>
       <div>{formContent(step)}</div>
-      <div>
-        <button onClick={handleBack}>back</button>
-        <button disabled={nextDisabled} onClick={handleNext}>
-          next
-        </button>
-      </div>
+      {
+        step == 5 ? (
+          <div></div>
+        ) : (
+          <div>
+            <button onClick={handleBack}>back</button>
+            {
+              step < 4 ? (
+                <button disabled={nextDisabled} onClick={handleNext}>
+                  next
+                </button>
+              ) : (
+                <button onClick={handleSubmit}>
+                  submit
+                </button>
+              )
+            }
+          </div>
+        )
+      }
       <div>
         <p>current form data:</p>
         {Object.entries(formData).map(([k, v]) => (
