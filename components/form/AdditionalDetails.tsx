@@ -3,7 +3,7 @@ import { FormProps } from "../../pages";
 import { validateApplicant } from "./ApplicantDetails";
 import { validateApplication } from "./ApplicationDetails";
 import { validateProperty } from "./PropertyDetails";
-import { validateStart } from "./start";
+import { validateStart } from "./Start";
 
 export function validateAll(formData: any): { [key: string]: string } {
   const errors = {

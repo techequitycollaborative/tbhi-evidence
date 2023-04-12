@@ -1,26 +1,18 @@
 import { useForm } from "react-hook-form";
-import { FormProps } from "../../pages";
+import { FormProps } from "@/pages";
+import { FormData } from "@/types/formdata"
+import { Race, EvictionReason, CriminalHistoryType } from "@/types/formoptions"
 
-const raceList = [
-  "American Indian or Alaska Native",
-  "Asian",
-  "Black or African American",
-  "Native Hawaiian or Other Pacific Islander",
-  "White",
-  "Two or More Races",
-  "No Response",
-];
-
-const evictionReasonList = ["reason 1", "reason 2", "reason 3"];
-
-const criminalHistoryTypeList = ["type 1", "type 2", "type 3", "type 4"];
+const raceList = Object.values(Race).filter((v) => isNaN(Number(v)));
+const evictionReasonList = Object.values(EvictionReason).filter((v) => isNaN(Number(v)));
+const criminalHistoryTypeList = Object.values(CriminalHistoryType).filter((v) => isNaN(Number(v)));
 
 /**
  * @returns An object with key/value pairs of errors,
  * where the key matches the name of the input field.
  * If there are no errors, returns an empty object.
  */
-export function validateApplicant(formData: any) {
+export function validateApplicant(formData: FormData) {
   const errors: any = {};
 
   if (!formData.race) {
@@ -31,57 +23,54 @@ export function validateApplicant(formData: any) {
 
   if (!formData.age) {
     errors.age = "Age is required";
-  } else if (!parseInt(formData.age) || parseInt(formData.age) < 1) {
+  } else if (isNaN(formData.age) || formData.age < 1) {
     errors.age = "Age must be a positive number";
   }
 
   if (!formData.yearlyIncome) {
     errors.yearlyIncome = "Yearly income is required";
-  } else if (
-    (!parseInt(formData.yearlyIncome) && parseInt(formData.yearlyIncome) !== 0) ||
-    parseInt(formData.yearlyIncome) < 0
-  ) {
+  } else if (isNaN(formData.yearlyIncome) || formData.yearlyIncome < 0) {
     errors.yearlyIncome = "Yearly income must be a non-negative number.";
   }
 
   if (!formData.creditScore) {
     errors.creditScore = "Credit score is required";
   } else if (
-    !parseInt(formData.creditScore) ||
-    parseInt(formData.creditScore) < 350 ||
-    parseInt(formData.creditScore) > 850
+    isNaN(formData.creditScore) ||
+    formData.creditScore < 350 ||
+    formData.creditScore > 850
   ) {
     errors.creditScore = "Credit score must be a number between 350 and 850";
   }
 
-  if (formData.evictionHistory || formData.evictionDate) {
-    if (!formData.evictionHistory || !formData.evictionDate) {
+  formData.evictionHistory.forEach((entry) => {
+    if (!entry.evictionReason || !entry.evictionDate) {
       errors.evictionHistory = "Must provide eviction reason with date.";
-    } else if (!evictionReasonList.includes(formData.evictionHistory)) {
+    } else if (!evictionReasonList.includes(entry.evictionReason)) {
       errors.evictionHistory = "Eviction history reason must be from provided list";
-    } else if (new Date(formData.evictionDate).toString() === "Invalid Date") {
-      errors.evictionDate = "Eviction date must be in correct format (MM-DD-YYYY).";
+    } else if (new Date(entry.evictionDate).toString() === "Invalid Date") {
+      errors.evictionDate = "Eviction date(s) must be in correct format (MM-DD-YYYY).";
     } else if (
-      new Date(formData.evictionDate).setUTCHours(0, 0, 0, 0) >= new Date().setUTCHours(0, 0, 0, 0)
+      new Date(entry.evictionDate).setUTCHours(0, 0, 0, 0) >= new Date().setUTCHours(0, 0, 0, 0)
     ) {
-      errors.evictionDate = "Eviction date must be in the past.";
+      errors.evictionDate = "Eviction date(s) must be in the past.";
     }
-  }
+  });
 
-  if (formData.criminalHistoryType || formData.convictionDate || formData.offenseName) {
-    if (!formData.criminalHistoryType || !formData.convictionDate || !formData.offenseName) {
+  formData.criminalHistory.forEach((entry) => {
+    if (!entry.criminalHistoryType || !entry.convictionDate || !entry.offenseName) {
       errors.evictionHistory = "Must provide criminal history type with date and offense name.";
-    } else if (!criminalHistoryTypeList.includes(formData.criminalHistoryType)) {
+    } else if (!criminalHistoryTypeList.includes(entry.criminalHistoryType)) {
       errors.evictionHistory = "Criminal history type must be from provided list";
-    } else if (new Date(formData.convictionDate).toString() === "Invalid Date") {
+    } else if (new Date(entry.convictionDate).toString() === "Invalid Date") {
       errors.convictionDate = "Criminal offense date must be in correct format (MM-DD-YYYY).";
     } else if (
-      new Date(formData.convictionDate).setUTCHours(0, 0, 0, 0) >=
+      new Date(entry.convictionDate).setUTCHours(0, 0, 0, 0) >=
       new Date().setUTCHours(0, 0, 0, 0)
     ) {
       errors.convictionDate = "Criminal offense date must be in the past.";
     }
-  }
+  });
 
   return errors;
 }
@@ -183,11 +172,11 @@ const ApplicantDetails = (props: FormProps) => {
             placeholder="date of eviction"
             id="eviction-history"
             defaultValue="1"
-            value={props.formData.evictionHistory}
+            value={props.formData.evictionHistory[0]?.evictionReason}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
-                evictionHistory: e.target.value,
+                evictionReason: e.target.value,
               });
             }}
           >
@@ -209,7 +198,7 @@ const ApplicantDetails = (props: FormProps) => {
             placeholder="date of eviction"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
-            value={props.formData.evictionDate}
+            value={props.formData.evictionHistory[0]?.evictionDate?.toLocaleString("en-US")}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -229,7 +218,7 @@ const ApplicantDetails = (props: FormProps) => {
             name="criminalHistoryType"
             id="criminal-history-type"
             defaultValue="1"
-            value={props.formData.criminalHistoryType}
+            value={props.formData.criminalHistory[0]?.criminalHistoryType}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -251,7 +240,7 @@ const ApplicantDetails = (props: FormProps) => {
           <input
             id="conviction-date"
             type="text"
-            value={props.formData.convictionDate}
+            value={props.formData.criminalHistory[0]?.convictionDate?.toLocaleString("en-US")}
             placeholder="date of conviction"
             onFocus={(e) => (e.target.type = "date")}
             onBlur={(e) => (e.target.type = "text")}
@@ -266,7 +255,7 @@ const ApplicantDetails = (props: FormProps) => {
             id="offense-name"
             placeholder="name of offense"
             type="text"
-            value={props.formData.offenseName}
+            value={props.formData.criminalHistory[0]?.offenseName}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,

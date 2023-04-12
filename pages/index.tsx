@@ -1,10 +1,13 @@
-import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
-import Start, { validateStart } from "@/components/form/start";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
-import AdditionalDetails, { validateAll } from "../components/form/AdditionalDetails";
-import ApplicationDetails, { validateApplication } from "../components/form/ApplicationDetails";
-import PropertyDetails, { validateProperty } from "../components/form/PropertyDetails";
+import { FormData, Eviction, CriminalHistoryEntry } from "@/types/formdata";
+import Start, { validateStart } from "@/components/form/Start";
+import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
+import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
+import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
+import AdditionalDetails, { validateAll } from "@/components/form/AdditionalDetails";
+import ThankYou from "@/components/form/ThankYou"
+
 
 // for local dev environment
 const SAVE_RECORD_URL = 'http://localhost:8000/saveRecord';
@@ -19,14 +22,37 @@ enum FormPage {
 }
 
 export interface FormProps {
-  formData: any;
+  formData: FormData;
   setFormData: (e: any) => void;
   errors?: any;
 }
 
 const Form: NextPage = () => {
   const [step, setStep] = useState(FormPage.Start);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: '',
+    race: '',
+    age: undefined,
+    yearlyIncome: undefined,
+    creditScore: undefined,
+    evictionHistory: [] as Eviction[],
+    criminalHistory: [] as CriminalHistoryEntry[],
+    street: '',
+    unit: '',
+    city: '',
+    zipcode: '',
+    monthlyRent: undefined,
+    landlordName: '',
+    screeningCompanyName: '',
+    screeningFee: undefined,
+    portableScreeningFee: undefined,
+    applicationMethod: undefined,
+    assessmentOutcome: undefined,
+    assessmentOutcomeDetails: '',
+    denialReason: undefined,
+    otherDenialReason: '',
+    additionalContextNotes: '',
+  });
   const [errors, setErrors] = useState(null as any);
   const [nextDisabled, setNextDisabled] = useState(false);
 
@@ -95,7 +121,7 @@ const Form: NextPage = () => {
       });
 
       setStep(step + 1);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err.message);
     }
   }
@@ -150,8 +176,8 @@ const Form: NextPage = () => {
       <div>
         <p>current form data:</p>
         {Object.entries(formData).map(([k, v]) => (
-          <p>
-            {k}: {v}
+          <p key={k}>
+            {k + ': ' + v}
           </p>
         ))}
       </div>
