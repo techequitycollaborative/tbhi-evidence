@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { FormProps } from "../../pages";
+import { FormProps } from "@/pages";
 
 const portableScreeningFeeAnswerList = ["yes", "no"];
 const applicationMethodList = ["method 1", "method 2", "method 3"];

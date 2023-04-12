@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { FormProps } from "../../pages";
+import { FormProps } from "@/pages";
 
 /**
  * @returns An object with key/value pairs of errors,
