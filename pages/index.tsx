@@ -153,33 +153,23 @@ const Form: NextPage = () => {
       <h1>header goes here</h1>
       <p>form nav goes here</p>
       <div>{formContent(step)}</div>
-      {
-        step == 5 ? (
-          <div></div>
-        ) : (
-          <div>
-            <button onClick={handleBack}>back</button>
-            {
-              step < 4 ? (
-                <button disabled={nextDisabled} onClick={handleNext}>
-                  next
-                </button>
-              ) : (
-                <button onClick={handleSubmit}>
-                  submit
-                </button>
-              )
-            }
-          </div>
-        )
-      }
-      <div>
-        <p>current form data:</p>
-        {Object.entries(formData).map(([k, v]) => (
-          <p key={k}>
-            {k + ': ' + v}
-          </p>
-        ))}
+      {step == 5 ? (
+        <div></div>
+      ) : (
+        <div>
+          <button onClick={handleBack}>back</button>
+          {step < 4 ? (
+            <button disabled={nextDisabled} onClick={handleNext}>
+              next
+            </button>
+          ) : (
+            <button onClick={handleSubmit}>submit</button>
+          )}
+        </div>
+      )}
+      <div style={{ whiteSpace: "pre-wrap" }}>
+        {`current form data:
+${JSON.stringify(formData, null, 4)}`}
       </div>
       <h3>footer goes here</h3>
     </>
