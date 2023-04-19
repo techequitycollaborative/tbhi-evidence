@@ -63,6 +63,7 @@ const Form: NextPage = () => {
   function handleBack() {
     if (step > FormPage.Start) {
       setStep(step - 1);
+      setNextDisabled(false)
     }
   }
 
