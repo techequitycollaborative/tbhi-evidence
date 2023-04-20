@@ -1,16 +1,14 @@
+import AdditionalDetails, { validateAll } from "@/components/form/AdditionalDetails";
+import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
+import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
+import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
+import Start, { validateStart } from "@/components/form/Start";
+import { CriminalHistoryEntry, Eviction, FormData } from "@/types/formdata";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { FormData, Eviction, CriminalHistoryEntry } from "@/types/formdata";
-import Start, { validateStart } from "@/components/form/Start";
-import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
-import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
-import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
-import AdditionalDetails, { validateAll } from "@/components/form/AdditionalDetails";
-import ThankYou from "@/components/form/ThankYou"
-
 
 // for local dev environment
-const SAVE_RECORD_URL = 'http://localhost:8000/saveRecord';
+const SAVE_RECORD_URL = "http://localhost:8000/saveRecord";
 
 enum FormPage {
   Start,
@@ -30,28 +28,28 @@ export interface FormProps {
 const Form: NextPage = () => {
   const [step, setStep] = useState(FormPage.Start);
   const [formData, setFormData] = useState({
-    email: '',
-    race: '',
+    email: "",
+    race: "",
     age: undefined,
     yearlyIncome: undefined,
     creditScore: undefined,
     evictionHistory: [] as Eviction[],
     criminalHistory: [] as CriminalHistoryEntry[],
-    street: '',
-    unit: '',
-    city: '',
-    zipcode: '',
+    street: "",
+    unit: "",
+    city: "",
+    zipcode: "",
     monthlyRent: undefined,
-    landlordName: '',
-    screeningCompanyName: '',
+    landlordName: "",
+    screeningCompanyName: "",
     screeningFee: undefined,
     portableScreeningFee: undefined,
     applicationMethod: undefined,
     assessmentOutcome: undefined,
-    assessmentOutcomeDetails: '',
+    assessmentOutcomeDetails: "",
     denialReason: undefined,
-    otherDenialReason: '',
-    additionalContextNotes: '',
+    otherDenialReason: "",
+    additionalContextNotes: "",
   });
   const [errors, setErrors] = useState(null as any);
   const [nextDisabled, setNextDisabled] = useState(false);
@@ -63,7 +61,7 @@ const Form: NextPage = () => {
   function handleBack() {
     if (step > FormPage.Start) {
       setStep(step - 1);
-      setNextDisabled(false)
+      setNextDisabled(false);
     }
   }
 
@@ -105,19 +103,18 @@ const Form: NextPage = () => {
   function handleSubmit() {
     try {
       const r = fetch(SAVE_RECORD_URL, {
-        method: 'POST',
-        headers : {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-      r.then(response => {
+      r.then((response) => {
         if (response.ok) {
-          console.log('submit succeeded');
-        }
-        else {
-          console.log('submit failed');
+          console.log("submit succeeded");
+        } else {
+          console.log("submit failed");
         }
       });
 
@@ -154,25 +151,31 @@ const Form: NextPage = () => {
       <h1>header goes here</h1>
       <p>form nav goes here</p>
       <div>{formContent(step)}</div>
-      {step == 5 ? (
-        <div></div>
-      ) : (
-        <div>
-          <button onClick={handleBack}>back</button>
-          {step < 4 ? (
-            <button disabled={nextDisabled} onClick={handleNext}>
-              next
-            </button>
-          ) : (
-            <button onClick={handleSubmit}>submit</button>
-          )}
-        </div>
-      )}
-      <div style={{ whiteSpace: "pre-wrap" }}>
-        {`current form data:
+      <div className="pb-8">
+        {step == 5 ? null : (
+          <div>
+            <button onClick={handleBack}>back</button>
+            {step < 4 ? (
+              <button disabled={nextDisabled} onClick={handleNext}>
+                next
+              </button>
+            ) : (
+              <button onClick={handleSubmit}>submit</button>
+            )}
+          </div>
+        )}
+        <div style={{ whiteSpace: "pre-wrap" }}>
+          {`current form data:
 ${JSON.stringify(formData, null, 4)}`}
+        </div>
       </div>
-      <h3>footer goes here</h3>
+      <div className="bg-navy h-8 w-full fixed bottom-0 flex justify-center items-center whitespace-pre">
+        <a href="https://google.com">About</a>
+        {" | "}
+        <a href="https://google.com">Contact</a>
+        {" | "}
+        <a href="https://www.google.com">Privacy Policy</a>
+      </div>
     </>
   );
 };
