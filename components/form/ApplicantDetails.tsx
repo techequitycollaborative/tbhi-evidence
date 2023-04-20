@@ -1,7 +1,8 @@
-import { useForm } from "react-hook-form";
 import { FormProps } from "@/pages";
-import { FormData } from "@/types/formdata"
-import { Race, EvictionReason, CriminalHistoryType } from "@/types/formoptions"
+import { FormData } from "@/types/formdata";
+import { CriminalHistoryType, EvictionReason, Race } from "@/types/formoptions";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 const raceList = Object.values(Race).filter((v) => isNaN(Number(v)));
 const evictionReasonList = Object.values(EvictionReason).filter((v) => isNaN(Number(v)));
@@ -45,30 +46,30 @@ export function validateApplicant(formData: FormData) {
 
   formData.evictionHistory.forEach((entry) => {
     if (!entry.evictionReason || !entry.evictionDate) {
-      errors.evictionHistory = "Must provide eviction reason with date.";
+      errors.evictionHistory = "Must provide eviction reason(s) with date(s).";
     } else if (!evictionReasonList.includes(entry.evictionReason)) {
-      errors.evictionHistory = "Eviction history reason must be from provided list";
-    } else if (new Date(entry.evictionDate).toString() === "Invalid Date") {
-      errors.evictionDate = "Eviction date(s) must be in correct format (MM-DD-YYYY).";
+      errors.evictionHistory = "Eviction history reason(s) must be from provided list";
+    } else if (entry.evictionDate.toString() === "Invalid Date") {
+      errors.evictionHistory = "Eviction date(s) must be in correct format (MM-DD-YYYY).";
     } else if (
       new Date(entry.evictionDate).setUTCHours(0, 0, 0, 0) >= new Date().setUTCHours(0, 0, 0, 0)
     ) {
-      errors.evictionDate = "Eviction date(s) must be in the past.";
+      errors.evictionHistory = "Eviction date(s) must be in the past.";
     }
   });
 
   formData.criminalHistory.forEach((entry) => {
     if (!entry.criminalHistoryType || !entry.convictionDate || !entry.offenseName) {
-      errors.evictionHistory = "Must provide criminal history type with date and offense name.";
+      errors.criminalHistory =
+        "Must provide criminal history type(s) with date(s) and offense name(s).";
     } else if (!criminalHistoryTypeList.includes(entry.criminalHistoryType)) {
-      errors.evictionHistory = "Criminal history type must be from provided list";
-    } else if (new Date(entry.convictionDate).toString() === "Invalid Date") {
-      errors.convictionDate = "Criminal offense date must be in correct format (MM-DD-YYYY).";
+      errors.criminalHistory = "Criminal history type(s) must be from provided list";
+    } else if (entry.convictionDate.toString() === "Invalid Date") {
+      errors.criminalHistory = "Criminal offense date(s) must be in correct format (MM-DD-YYYY).";
     } else if (
-      new Date(entry.convictionDate).setUTCHours(0, 0, 0, 0) >=
-      new Date().setUTCHours(0, 0, 0, 0)
+      new Date(entry.convictionDate).setUTCHours(0, 0, 0, 0) >= new Date().setUTCHours(0, 0, 0, 0)
     ) {
-      errors.convictionDate = "Criminal offense date must be in the past.";
+      errors.criminalHistory = "Criminal offense date(s) must be in the past.";
     }
   });
 
@@ -80,6 +81,9 @@ const ApplicantDetails = (props: FormProps) => {
     mode: "all",
   });
 
+  const [criminalHistoryRows, setCriminalHistoryRows] = useState(1);
+  const [evictionHistoryRows, setEvictionHistoryRows] = useState(1);
+
   return (
     <div>
       <p>Applicant Details</p>
@@ -88,8 +92,7 @@ const ApplicantDetails = (props: FormProps) => {
           Race
           <select
             id="race"
-            defaultValue="1"
-            value={props.formData.race}
+            value={props.formData.race || "1"}
             onChange={(e) => {
               props.setFormData({
                 ...props.formData,
@@ -168,107 +171,123 @@ const ApplicantDetails = (props: FormProps) => {
       <div className="eviction-history-selection">
         <label>
           Eviction History
-          <select
-            placeholder="date of eviction"
-            id="eviction-history"
-            defaultValue="1"
-            value={props.formData.evictionHistory[0]?.evictionReason}
-            onChange={(e) => {
-              props.setFormData({
-                ...props.formData,
-                evictionReason: e.target.value,
-              });
-            }}
-          >
-            <option value="1" disabled>
-              select reason
-            </option>
-
-            {evictionReasonList.map((el) => {
-              return (
-                <option key={el} value={el}>
-                  {el}
+          {Array.from({ length: evictionHistoryRows }).map((_, index) => (
+            <div key={index}>
+              <select
+                name={`evictionReason_${index}`}
+                id={`eviction-reason-${index}`}
+                placeholder="date of eviction"
+                value={props.formData.evictionHistory[index]?.evictionReason || "1"}
+                onChange={(e) => {
+                  const newFormData = {
+                    ...props.formData,
+                  };
+                  updateHistoryArray(newFormData.evictionHistory, index, {
+                    evictionReason: e.target.value,
+                  });
+                  props.setFormData(newFormData);
+                }}
+              >
+                <option value="1" disabled>
+                  select reason
                 </option>
-              );
-            })}
-          </select>
-          <input
-            id="eviction-date"
-            type="text"
-            placeholder="date of eviction"
-            onFocus={(e) => (e.target.type = "date")}
-            onBlur={(e) => (e.target.type = "text")}
-            value={props.formData.evictionHistory[0]?.evictionDate?.toLocaleString("en-US")}
-            onChange={(e) => {
-              props.setFormData({
-                ...props.formData,
-                evictionDate: e.target.value,
-              });
-            }}
-          />
-          <p style={{ color: "red" }}>
-            {props.errors?.evictionHistory || props.errors?.evictionDate || null}
-          </p>
+
+                {evictionReasonList.map((el) => {
+                  return (
+                    <option key={el} value={el}>
+                      {el}
+                    </option>
+                  );
+                })}
+              </select>
+              <input
+                name={`evictionDate_${index}`}
+                id={`eviction-date-${index}`}
+                type="text"
+                placeholder="date of eviction"
+                onFocus={(e) => (e.target.type = "date")}
+                value={isoDateOnly(props.formData.evictionHistory[index]?.evictionDate)}
+                onChange={(e) => {
+                  const newFormData = {
+                    ...props.formData,
+                  };
+                  updateHistoryArray(newFormData.evictionHistory, index, {
+                    evictionDate: new Date(e.target.value),
+                  });
+                  props.setFormData(newFormData);
+                }}
+              />
+            </div>
+          ))}
+          <p style={{ color: "red" }}>{props.errors?.evictionHistory || null}</p>
+          <button onClick={() => setEvictionHistoryRows((rows) => rows + 1)}>
+            Add Eviction History
+          </button>
         </label>
       </div>
       <div>
         <label>
           Criminal History
-          <select
-            name="criminalHistoryType"
-            id="criminal-history-type"
-            defaultValue="1"
-            value={props.formData.criminalHistory[0]?.criminalHistoryType}
-            onChange={(e) => {
-              props.setFormData({
-                ...props.formData,
-                criminalHistoryType: e.target.value,
-              });
-            }}
-          >
-            <option value="1" disabled>
-              select type
-            </option>
-            {criminalHistoryTypeList.map((el) => {
-              return (
-                <option key={el} value={el}>
-                  {el}
+          {Array.from({ length: criminalHistoryRows }).map((_, index) => (
+            <div key={index}>
+              <select
+                name={`criminalHistoryType_${index}`}
+                id={`criminal-history-type-${index}`}
+                value={props.formData.criminalHistory[index]?.criminalHistoryType || "1"}
+                onChange={(e) => {
+                  const newFormData = {
+                    ...props.formData,
+                  };
+                  updateHistoryArray(newFormData.criminalHistory, index, {
+                    criminalHistoryType: e.target.value,
+                  });
+                  props.setFormData(newFormData);
+                }}
+              >
+                <option value="1" disabled>
+                  select type
                 </option>
-              );
-            })}
-          </select>
-          <input
-            id="conviction-date"
-            type="text"
-            value={props.formData.criminalHistory[0]?.convictionDate?.toLocaleString("en-US")}
-            placeholder="date of conviction"
-            onFocus={(e) => (e.target.type = "date")}
-            onBlur={(e) => (e.target.type = "text")}
-            onChange={(e) => {
-              props.setFormData({
-                ...props.formData,
-                convictionDate: e.target.value,
-              });
-            }}
-          />
-          <input
-            id="offense-name"
-            placeholder="name of offense"
-            type="text"
-            value={props.formData.criminalHistory[0]?.offenseName}
-            onChange={(e) => {
-              props.setFormData({
-                ...props.formData,
-                offenseName: e.target.value,
-              });
-            }}
-          />
-          <p style={{ color: "red" }}>
-            {props.errors?.criminalHistoryType ||
-              props.errors?.convictionDate ||
-              props.errors?.offenseName ||
-              null}
-          </p>
+                {criminalHistoryTypeList.map((el) => {
+                  return (
+                    <option key={el} value={el}>
+                      {el}
+                    </option>
+                  );
+                })}
+              </select>
+              <input
+                id={`conviction-date-${index}`}
+                type="text"
+                value={isoDateOnly(props.formData.criminalHistory[index]?.convictionDate)}
+                placeholder="date of conviction"
+                onFocus={(e) => (e.target.type = "date")}
+                onChange={(e) => {
+                  const newFormData = { ...props.formData };
+                  updateHistoryArray(newFormData.criminalHistory, index, {
+                    convictionDate: new Date(e.target.value),
+                  });
+                  props.setFormData(newFormData);
+                }}
+              />
+              <input
+                id={`offense-name-${index}`}
+                placeholder="name of offense"
+                type="text"
+                value={props.formData.criminalHistory[index]?.offenseName}
+                onChange={(e) => {
+                  const newFormData = { ...props.formData };
+                  updateHistoryArray(newFormData.criminalHistory, index, {
+                    offenseName: e.target.value,
+                  });
+                  props.setFormData(newFormData);
+                }}
+              />
+            </div>
+          ))}
+          <p style={{ color: "red" }}>{props.errors?.criminalHistory || null}</p>
+          <button onClick={() => setCriminalHistoryRows((rows) => rows + 1)}>
+            Add Criminal History
+          </button>
         </label>
       </div>
     </div>
@@ -276,3 +295,19 @@ const ApplicantDetails = (props: FormProps) => {
 };
 
 export default ApplicantDetails;
+
+function updateHistoryArray<T extends Object>(array: Array<T>, index: number, update: Object) {
+  if (array[index] !== undefined) {
+    array[index] = { ...array[index], ...update };
+  } else {
+    array.push(update as T);
+  }
+  return array;
+}
+
+function isoDateOnly(date: Date) {
+  if (date) {
+    return date.toISOString().split("T")[0];
+  }
+  return "";
+}
