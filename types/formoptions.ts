@@ -1,4 +1,4 @@
-export enum Race {
+export const Race = [
   "American Indian or Alaska Native",
   "Asian",
   "Black or African American",
@@ -6,33 +6,20 @@ export enum Race {
   "White",
   "Two or More Races",
   "No Response",
-};
+] as const;
+export type Race = typeof Race[number];
 
-export enum EvictionReason {
-  "Reason 1",
-  "Reason 2",
-  "Reason 3",
-};
+export const EvictionReason = ["Reason 1", "Reason 2", "Reason 3"] as const;
+export type EvictionReason = typeof EvictionReason[number];
 
-export enum CriminalHistoryType {
-  "Reason 1",
-  "Reason 2",
-  "Reason 3",
-};
+export const CriminalHistoryType = ["Mideameanor", "Felony"] as const;
+export type CriminalHistoryType = typeof CriminalHistoryType[number];
 
-export enum ApplicationMethod {
-  "Method 1",
-  "Method 2",
-  "Method 3",
-};
+export const ApplicationMethod = ["Method 1", "Method 2", "Method 3"] as const;
+export type ApplicationMethod = typeof ApplicationMethod[number];
 
-export enum AssessmentOutcome {
-  "Accepted",
-  "Denied",
-};
+export const AssessmentOutcome = ["Accepted", "Denied"] as const;
+export type AssessmentOutcome = typeof AssessmentOutcome[number];
 
-export enum DenialReason {
-  "Reason 1",
-  "Reason 2",
-  "Reason 3",
-}
+export const DenialReason = ["Reason 1", "Reason 2", "Reason 3"] as const;
+export type DenialReason = typeof DenialReason[number];

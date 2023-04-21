@@ -1,4 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+
+// @ts-ignore
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -16,6 +20,7 @@ module.exports = {
       "blue-gray": "#9fa9b4",
       mist: "#e9f3f8",
       "dark-blue-gray": "#696c78",
+      red: colors.red,
     },
     extend: {},
   },

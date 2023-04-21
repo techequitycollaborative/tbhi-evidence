@@ -1,8 +1,8 @@
-import { Race, EvictionReason, CriminalHistoryType, ApplicationMethod, AssessmentOutcome, DenialReason } from './formoptions';
+import { ApplicationMethod, AssessmentOutcome, CriminalHistoryType, DenialReason, EvictionReason, Race } from './formoptions';
 
 export interface FormData {
   email: string,
-  race: string,
+  race: Race,
   age: number | undefined,
   yearlyIncome: number | undefined,
   creditScore: number | undefined,

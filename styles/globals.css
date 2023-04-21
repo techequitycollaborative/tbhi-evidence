@@ -43,7 +43,7 @@
     --card-border-rgb: 131, 134, 135;
   }
 
-  @media (prefers-color-scheme: dark) {
+  /* @media (prefers-color-scheme: dark) {
     :root {
       --foreground-rgb: 255, 255, 255;
       --background-start-rgb: 0, 0, 0;
@@ -74,7 +74,7 @@
       --card-rgb: 100, 100, 100;
       --card-border-rgb: 200, 200, 200;
     }
-  }
+  } */
 
   * {
     box-sizing: border-box;
@@ -106,10 +106,35 @@
   }
 
   /* any new tailwind css below this */
+  :root {
+    @apply font-sans font-normal;
+  }
 
+  label {
+    @apply text-navy text-xl;
+  }
+
+  input {
+    @apply text-navy text-lg bg-blue-gray/90 rounded-md border placeholder-dark-blue-gray p-4;
+  }
+
+  select {
+    @apply text-navy text-lg bg-blue-gray/90 rounded-md border placeholder-dark-blue-gray p-4;
+  }
 }
 
 @layer components {
+  .fake-label {
+    @apply text-navy text-xl;
+  }
+
+  .add-history-btn {
+    @apply text-blue-gray/50 text-sm;
+  }
+
+  .error-text {
+    @apply text-red-500 text-sm;
+  }
 }
 
 @layer utilities {
