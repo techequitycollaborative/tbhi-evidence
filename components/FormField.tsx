@@ -1,4 +1,4 @@
-import Input, { FormInputProps } from "@/components/input";
+import Input, { FormInputProps } from "@/components/Input";
 
 export type FormFieldProps = FormInputProps & {
   labelText?: string;
