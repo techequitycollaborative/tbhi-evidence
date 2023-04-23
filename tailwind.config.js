@@ -21,6 +21,7 @@ module.exports = {
       mist: "#e9f3f8",
       "dark-blue-gray": "#696c78",
       red: colors.red,
+      white: colors.white,
     },
     extend: {},
   },
