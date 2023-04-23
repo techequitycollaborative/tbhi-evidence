@@ -1,9 +1,10 @@
-import { useForm } from "react-hook-form";
-import { FormProps } from "@/pages";
+import FormField from "@/components/FormField";
 import { validateApplicant } from "@/components/form/ApplicantDetails";
 import { validateApplication } from "@/components/form/ApplicationDetails";
 import { validateProperty } from "@/components/form/PropertyDetails";
 import { validateStart } from "@/components/form/Start";
+import { FormProps } from "@/pages";
+import { useForm } from "react-hook-form";
 
 export function validateAll(formData: any): { [key: string]: string } {
   const errors = {
@@ -26,26 +27,17 @@ const AdditionalDetails = (props: FormProps) => {
       <p>Additional Details</p>
       <p>Please fill out any additional supporting information</p>
       <div>
-        <label>
-          Additional context notes
-          <textarea
-            id="additional-context-notes"
-            placeholder="additionalContextNotes"
-            value={props.formData.additionalContextNotes}
-            onChange={(e) => {
-              props.setFormData({
-                ...props.formData,
-                additionalContextNotes: e.target.value,
-              });
-            }}
-          />
-        </label>
+        <FormField
+          {...props}
+          labelId="additionalContextNotes"
+          labelText="Additional context notes"
+          formDataKey="additionalContextNotes"
+          type="text"
+        />
       </div>
       <div>
-        <label>
-          Upload files
-          <p>Upload goes here</p>
-        </label>
+        <p className="fake-label">Upload file(s)</p>
+        <p>Upload goes here</p>
       </div>
     </div>
   );

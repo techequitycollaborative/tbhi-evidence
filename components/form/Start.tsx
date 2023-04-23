@@ -1,4 +1,5 @@
-import { FormProps } from '../../pages';
+import FormField, { FormFieldProps } from "@/components/FormField";
+import { FormProps } from "../../pages";
 
 /**
  * @returns An object with key/value pairs of errors,
@@ -12,19 +13,15 @@ export function validateStart(formData: any): { [key: string]: string } {
 }
 
 function Start(props: FormProps) {
-  return (
-    <>
-      <p>Email</p>
-      <input
-        onChange={(e) => {
-          props.setFormData({
-            ...props.formData,
-            email: e.target.value,
-          });
-        }}
-      />
-    </>
-  );
+  const fieldProps: FormFieldProps = {
+    ...props,
+    labelId: "email",
+    labelText: "Email (for confirmation)",
+    formDataKey: "email",
+    placeholder: "enter your email address",
+    type: "email",
+  };
+  return <FormField {...fieldProps} />;
 }
 
 export default Start;
