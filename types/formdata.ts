@@ -11,7 +11,7 @@ export interface FormData {
   street: string,
   unit: string,
   city: string,
-  zipcode: string,
+  zipcode: number,
   monthlyRent: number | undefined,
   landlordName: string,
   screeningCompanyName: string,

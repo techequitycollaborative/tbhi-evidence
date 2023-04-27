@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 
 // for local dev environment
 const SAVE_RECORD_URL = "http://localhost:8000/saveRecord";
+const ALL_PEOPLE_URL = "http://localhost:8000/people";
+const ALL_APPLICATIONS_URL = "http://localhost:8000/application";
 
 enum FormPage {
   Start,
@@ -165,6 +167,12 @@ const Form: NextPage = () => {
             )}
           </div>
         )}
+        <div>
+          <button onClick={testSubmit}>TEST SUBMIT</button>
+        </div>
+        <div>
+          <button onClick={testFetch}>TEST FETCH</button>
+        </div>
         <div style={{ whiteSpace: "pre-wrap" }}>
           {`current form data:
 ${JSON.stringify(formData, null, 4)}`}
@@ -174,5 +182,84 @@ ${JSON.stringify(formData, null, 4)}`}
     </>
   );
 };
+
+// ONLY FOR TESTING. DELETE AFTER GOING LIVE OR FIND SOMEWHERE ELSE TO PUT IT.
+function testSubmit() {
+  try {
+    const r = fetch(SAVE_RECORD_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        email: "conrad@madeup.biz",
+        race: "Black or African American",
+        age: 50,
+        yearlyIncome: 100000,
+        creditScore: 700,
+        evictionHistory: [
+          {
+            evictionDate: new Date("2021-01-01"),
+            evictionReason: "Reason 1",
+          },
+          {
+            evictionDate: new Date("2021-02-01"),
+            evictionReason: "Reason 2",
+          },
+        ],
+        criminalHistory: [
+          {
+            convictionDate: new Date("2021-01-01"),
+            criminalHistoryType: "Felony",
+            offenseName: "robbery",
+          },
+          {
+            convictionDate: new Date("2021-03-01"),
+            criminalHistoryType: "Felony",
+            offenseName: "burglary",
+          },
+        ],
+        street: "joey way",
+        unit: "2C",
+        city: "Seattle",
+        zipcode: 84510,
+        monthlyRent: 1000,
+        landlordName: "joey",
+        screeningCompanyName: "joey's screening",
+        screeningFee: 100,
+        portableScreeningFee: "Yes",
+        applicationMethod: "Method 1",
+        assessmentOutcome: "Denied",
+        assessmentOutcomeDetails: "didn't like me",
+        denialReason: "Other",
+        otherDenialReason: "didn't like me",
+        additionalContextNotes: "joey is not cool",
+      } as FormData),
+    });
+    r.then(async (response) => {
+      if (response.ok) {
+        window.alert("success");
+      } else {
+        window.alert(await response.text());
+      }
+    });
+  } catch (err: any) {
+    console.log(err.message);
+  }
+}
+function testFetch() {
+  const r = fetch(ALL_APPLICATIONS_URL, {
+    method: "GET",
+  });
+  r.then(async (response) => {
+    if (response.ok) {
+      console.log("fetch succeeded");
+      console.log(JSON.stringify(await response.json(), null, 2));
+    } else {
+      window.alert("fetch failed");
+    }
+  });
+}
 
 export default Form;
