@@ -78,7 +78,7 @@ export default function Input(props: FormInputProps) {
           id={labelId}
           placeholder={placeholder}
           type={type}
-          value={value}
+          value={value || ""}
           onChange={onChange}
           onFocus={() => setType(props.type)}
         />
