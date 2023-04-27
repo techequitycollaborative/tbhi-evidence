@@ -4,7 +4,7 @@ import ApplicantDetails, { validateApplicant } from "@/components/form/Applicant
 import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
 import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
 import Start, { validateStart } from "@/components/form/Start";
-import { CriminalHistoryEntry, Eviction, FormData } from "@/types/formdata";
+import { CriminalHistoryEntry, Eviction, FormData, SubmittableFormData } from "@/types/formdata";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 
@@ -30,29 +30,9 @@ export interface FormProps {
 
 const Form: NextPage = () => {
   const [step, setStep] = useState(FormPage.Start);
-  const [formData, setFormData] = useState({
-    email: "",
-    race: "",
-    age: undefined,
-    yearlyIncome: undefined,
-    creditScore: undefined,
+  const [formData, setFormData] = useState<FormData>({
     evictionHistory: [] as Eviction[],
     criminalHistory: [] as CriminalHistoryEntry[],
-    street: "",
-    unit: "",
-    city: "",
-    zipcode: "",
-    monthlyRent: undefined,
-    landlordName: "",
-    screeningCompanyName: "",
-    screeningFee: undefined,
-    portableScreeningFee: undefined,
-    applicationMethod: undefined,
-    assessmentOutcome: undefined,
-    assessmentOutcomeDetails: "",
-    denialReason: undefined,
-    otherDenialReason: "",
-    additionalContextNotes: "",
   });
   const [errors, setErrors] = useState(null as any);
   const [nextDisabled, setNextDisabled] = useState(false);

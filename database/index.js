@@ -20,6 +20,7 @@ const p = new Pool({
   database: process.env.DATABASE,
   user: process.env.USERNAME,
   password: process.env.PASSWORD,
+  // @ts-ignore
   port: process.env.DB_PORT,
   dialect: "postgres",
   ssl: { rejectUnauthorized: false },
