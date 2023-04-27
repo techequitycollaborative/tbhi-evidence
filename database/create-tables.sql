@@ -37,7 +37,7 @@ create table if not exists form.application (
 	denial_reason varchar(50),
 	denial_details text,
 	additional_details text,
-	constraint fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
+	constraint application_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );
 
 create table if not exists form.eviction (
@@ -45,7 +45,7 @@ create table if not exists form.eviction (
 	person_id int,
 	eviction_date date,
 	reason varchar(50),
-	constraint fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
+	constraint eviction_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );
 
 create table if not exists form.criminal_history (
@@ -54,5 +54,5 @@ create table if not exists form.criminal_history (
 	"type" varchar(50),
 	conviction_date date,
 	offense varchar(50),
-	constraint fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
+	constraint criminal_history_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );
