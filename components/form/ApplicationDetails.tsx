@@ -127,7 +127,7 @@ const ApplicationDetails = (props: FormProps) => {
       <FormField
         {...props}
         labelId="otherDenialReason"
-        formDataKey="denialReason"
+        formDataKey="otherDenialReason"
         placeholder="if other, explain here"
         type="text"
       />

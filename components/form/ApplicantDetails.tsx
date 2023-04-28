@@ -41,7 +41,7 @@ export function validateApplicant(formData: FormData) {
     errors.creditScore = "Credit score must be a number between 350 and 850";
   }
 
-  formData.evictionHistory.forEach((entry) => {
+  formData.evictionHistory?.forEach((entry) => {
     if (!entry.evictionReason || !entry.evictionDate) {
       errors.evictionHistory = "Must provide eviction reason(s) with date(s).";
     } else if (!EvictionReason.includes(entry.evictionReason)) {
@@ -55,7 +55,7 @@ export function validateApplicant(formData: FormData) {
     }
   });
 
-  formData.criminalHistory.forEach((entry) => {
+  formData.criminalHistory?.forEach((entry) => {
     if (!entry.criminalHistoryType || !entry.convictionDate || !entry.offenseName) {
       errors.criminalHistory =
         "Must provide criminal history type(s) with date(s) and offense name(s).";
