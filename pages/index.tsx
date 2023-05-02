@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Nav from "@/components/Nav";
+import Button from "@/components/Button";
 import Footer from "@/components/Footer";
 import AdditionalDetails, { validateAll } from "@/components/form/AdditionalDetails";
 import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
@@ -131,31 +132,37 @@ const Form: NextPage = () => {
     }
   }
 
+  function nextButton(step: number) {
+    switch (step) {
+      case FormPage.Start:
+        return <Button onClick={handleNext}>start</Button>
+      case FormPage.ApplicantDetails:
+      case FormPage.PropertyDetails:
+      case FormPage.ApplicationDetails:
+        return <Button disabled={nextDisabled} onClick={handleNext}>next</Button>;
+      case FormPage.AdditionalDetails:
+        return <Button onClick={handleSubmit}>submit</Button>
+      case FormPage.ThankYou:
+        return <div>submit another</div>;
+    }
+  }
+
   return (
     <div>
       <Header logo={false} />
       <div className="w-1/2 min-w-[600px] m-auto">
         <div>
-          {step > 0 ? (
+          {step > 0 && step <= 4 ? (
             <Nav currentPage={step} lastPage={4} back={handleBack} />
           ) : (
             <div />
           )}
         </div>
         <div>{formContent(step)}</div>
-        <div className="pb-8">
-          {step == 5 ? null : (
-            <div>
-              <button onClick={handleBack}>back</button>
-              {step < 4 ? (
-                <button disabled={nextDisabled} onClick={handleNext}>
-                  next
-                </button>
-              ) : (
-                <button onClick={handleSubmit}>submit</button>
-              )}
-            </div>
-          )}
+        <div className="mb-8">
+          {nextButton(step)}
+        </div>
+        <div>
           <div>
             <button onClick={testSubmit}>TEST SUBMIT</button>
           </div>

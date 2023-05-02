@@ -93,7 +93,7 @@ const ApplicantDetails = (props: FormProps) => {
 
   return (
     <div>
-      <p>Applicant Details</p>
+      <h2 className="">Applicant Details</h2>
       <FormField
         {...props}
         labelId="race"
