@@ -1,7 +1,7 @@
 import FormField from "@/components/FormField";
 import { FormProps } from "@/pages";
 import { FormData } from "@/types/formdata";
-import { CriminalHistoryType, EvictionReason, Race } from "@/types/formoptions";
+import { CriminalHistoryType, EvictionReason, Race, Ethnicity } from "@/types/formoptions";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -17,6 +17,12 @@ export function validateApplicant(formData: FormData) {
     errors.race = "Race is required";
   } else if (!Race.includes(formData.race)) {
     errors.race = "Race must be from provided list";
+  }
+
+  if (!formData.ethnicity) {
+    errors.ethnicity = "Ethnicity is required";
+  } else if (!Ethnicity.includes(formData.ethnicity)) {
+    errors.ethnicity = "Ethnicity must be from provided list";
   }
 
   if (!formData.age) {
@@ -39,6 +45,10 @@ export function validateApplicant(formData: FormData) {
     formData.creditScore > 850
   ) {
     errors.creditScore = "Credit score must be a number between 350 and 850";
+  }
+
+  if (formData.rentalDebt && (isNaN(formData.rentalDebt) || formData.rentalDebt < 0)) {
+    errors.rentalDebt = "Rental debt must be a positive number";
   }
 
   formData.evictionHistory?.forEach((entry) => {
@@ -95,6 +105,15 @@ const ApplicantDetails = (props: FormProps) => {
       />
       <FormField
         {...props}
+        labelId="ethnicity"
+        labelText="Ethnicity"
+        formDataKey="ethnicity"
+        placeholder="select one"
+        type="select"
+        options={Ethnicity as readonly string[]}
+      />
+      <FormField
+        {...props}
         labelId="age"
         labelText="Age"
         formDataKey="age"
@@ -115,6 +134,14 @@ const ApplicantDetails = (props: FormProps) => {
         labelText="Credit Score"
         formDataKey="creditScore"
         placeholder="enter a number between 300 - 850"
+        type="number"
+      />
+      <FormField
+        {...props}
+        labelId="rentalDebt"
+        labelText="Rental Debt"
+        formDataKey="rentalDebt"
+        placeholder="enter if applicable"
         type="number"
       />
       <p className="fake-label">Eviction History</p>

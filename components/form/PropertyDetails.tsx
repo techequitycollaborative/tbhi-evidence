@@ -20,6 +20,9 @@ export function validateProperty(formData: any): { [key: string]: string } {
   if (!formData.city) {
     errors.city = "City is required";
   }
+  if (!formData.state) {
+    errors.state = "State is required";
+  }
 
   if (!formData.zipcode) {
     errors.zipcode = "Zipcode is required";
@@ -68,6 +71,13 @@ const PropertyDetails = (props: FormProps) => {
         labelId="propertyCity"
         labelText="City"
         formDataKey="city"
+        type="text"
+      />
+      <FormField
+        {...props}
+        labelId="propertyState"
+        labelText="State"
+        formDataKey="state"
         type="text"
       />
       <FormField

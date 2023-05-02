@@ -35,10 +35,6 @@ const AdditionalDetails = (props: FormProps) => {
           type="text"
         />
       </div>
-      <div>
-        <p className="fake-label">Upload file(s)</p>
-        <p>Upload goes here</p>
-      </div>
     </div>
   );
 };

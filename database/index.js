@@ -61,10 +61,10 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
   try {
     await client.query("BEGIN");
     const result = await client.query(
-      `INSERT INTO form.person (organization, email, race, age, income, credit_score)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO form.person (organization, email, race, ethnicity, age, income, credit_score, rental_debt)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING person_id`,
-      [data.organization, data.email, data.race, data.age, data.income, data.creditScore]
+      [data.organization, data.email, data.race, data.ethnicity, data.age, data.yearlyIncome, data.creditScore, data.rentalDebt]
     );
     const personId = result.rows[0]["person_id"];
     await client.query(

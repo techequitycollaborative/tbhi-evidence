@@ -20,6 +20,10 @@ export function validateApplication(formData: any): { [key: string]: string } {
     errors.screeningCompanyName = "Screening company name is required";
   }
 
+  if (!formData.applicationDate) {
+    errors.applicationDate = "Application date is required";
+  }
+
   if (!formData.screeningFee) {
     errors.screeningFee = "Screening fee is required";
   } else if (!parseInt(formData.screeningFee) || parseInt(formData.screeningFee) < 0) {
@@ -72,6 +76,14 @@ const ApplicationDetails = (props: FormProps) => {
         formDataKey="screeningCompanyName"
         placeholder="enter name"
         type="text"
+      />
+      <FormField
+        {...props}
+        labelId="applicationDate"
+        labelText="Application Date"
+        formDataKey="applicationDate"
+        placeholder="date of application"
+        type="date"
       />
       <FormField
         {...props}

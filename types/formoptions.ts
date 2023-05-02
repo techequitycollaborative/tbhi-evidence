@@ -10,6 +10,13 @@ export const Race = [
 ] as const;
 export type Race = (typeof Race)[number];
 
+export const Ethnicity = [
+  "Ethnicity 1",
+  "Ethnicity 2",
+  "Ethnicity 3",
+] as const;
+export type Ethnicity = (typeof Ethnicity)[number];
+
 export const EvictionReason = ["Reason 1", "Reason 2", "Reason 3"] as const;
 export type EvictionReason = (typeof EvictionReason)[number];
 

@@ -7,14 +7,14 @@
 
 create table if not exists form.person (
 	person_id serial primary key,
-	-- Don't see case number in the design anymore?
-	-- case_number varchar(10) unique not null,
 	organization varchar(50),
 	email varchar(50),
 	race varchar(50),
+	ethnicity varchar(50),
 	age int,
 	income int,
-	credit_score int
+	credit_score int,
+	rental_debt int
 );
 
 create table if not exists form.application (
