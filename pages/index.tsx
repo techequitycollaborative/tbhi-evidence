@@ -1,4 +1,6 @@
-import Footer from "@/components/footer";
+import Header from "@/components/Header";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 import AdditionalDetails, { validateAll } from "@/components/form/AdditionalDetails";
 import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
 import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
@@ -130,36 +132,44 @@ const Form: NextPage = () => {
   }
 
   return (
-    <>
-      <h1>header goes here</h1>
-      <p>form nav goes here</p>
-      <div>{formContent(step)}</div>
-      <div className="pb-8">
-        {step == 5 ? null : (
+    <div>
+      <Header logo={false} />
+      <div className="w-1/2 min-w-[600px] m-auto">
+        <div>
+          {step > 0 ? (
+            <Nav currentPage={step} lastPage={4} back={handleBack} />
+          ) : (
+            <div />
+          )}
+        </div>
+        <div>{formContent(step)}</div>
+        <div className="pb-8">
+          {step == 5 ? null : (
+            <div>
+              <button onClick={handleBack}>back</button>
+              {step < 4 ? (
+                <button disabled={nextDisabled} onClick={handleNext}>
+                  next
+                </button>
+              ) : (
+                <button onClick={handleSubmit}>submit</button>
+              )}
+            </div>
+          )}
           <div>
-            <button onClick={handleBack}>back</button>
-            {step < 4 ? (
-              <button disabled={nextDisabled} onClick={handleNext}>
-                next
-              </button>
-            ) : (
-              <button onClick={handleSubmit}>submit</button>
-            )}
+            <button onClick={testSubmit}>TEST SUBMIT</button>
           </div>
-        )}
-        <div>
-          <button onClick={testSubmit}>TEST SUBMIT</button>
-        </div>
-        <div>
-          <button onClick={testFetch}>TEST FETCH</button>
-        </div>
-        <div style={{ whiteSpace: "pre-wrap" }}>
-          {`current form data:
-${JSON.stringify(formData, null, 4)}`}
+          <div>
+            <button onClick={testFetch}>TEST FETCH</button>
+          </div>
+          <div style={{ whiteSpace: "pre-wrap" }}>
+            {`current form data:
+  ${JSON.stringify(formData, null, 4)}`}
+          </div>
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
