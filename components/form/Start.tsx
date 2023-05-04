@@ -21,7 +21,14 @@ function Start(props: FormProps) {
     placeholder: "enter your email address",
     type: "email",
   };
-  return <FormField {...fieldProps} />;
+  return (
+    <>
+      <p>Welcome to the TBHI evidence collection form, where you may submit details of an application for yourself or on behalf of an applicant. Please have applicant, property, application details ready.</p>
+      <div className="w-[300px] m-auto">
+        <FormField {...fieldProps} />
+      </div>
+    </>
+  );
 }
 
 export default Start;

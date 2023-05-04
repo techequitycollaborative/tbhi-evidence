@@ -149,16 +149,14 @@ const Form: NextPage = () => {
 
   return (
     <div>
-      <Header logo={false} />
-      <div className="w-1/2 min-w-[600px] m-auto">
-        <div>
-          {step > 0 && step <= 4 ? (
-            <Nav currentPage={step} lastPage={4} back={handleBack} />
-          ) : (
-            <div />
-          )}
-        </div>
-        <div>{formContent(step)}</div>
+      <Header logo={step > 0 && step <= 4 ? false : true} />
+      <div className="w-1/2 min-w-[600px] mx-auto mt-16 pb-20">
+        {step > 0 && step <= 4 ? (
+          <Nav currentPage={step} lastPage={4} back={handleBack} />
+        ) : (
+          null
+        )}
+        <div className="mt-8">{formContent(step)}</div>
         <div className="mb-8">
           {nextButton(step)}
         </div>

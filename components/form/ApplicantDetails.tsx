@@ -93,41 +93,46 @@ const ApplicantDetails = (props: FormProps) => {
 
   return (
     <div>
-      <h2 className="">Applicant Details</h2>
-      <FormField
-        {...props}
-        labelId="race"
-        labelText="Race"
-        formDataKey="race"
-        placeholder="select one"
-        type="select"
-        options={Race as readonly string[]}
-      />
-      <FormField
-        {...props}
-        labelId="ethnicity"
-        labelText="Ethnicity"
-        formDataKey="ethnicity"
-        placeholder="select one"
-        type="select"
-        options={Ethnicity as readonly string[]}
-      />
-      <FormField
-        {...props}
-        labelId="age"
-        labelText="Age"
-        formDataKey="age"
-        placeholder="applicant's age"
-        type="number"
-      />
-      <FormField
-        {...props}
-        labelId="yearlyIncome"
-        labelText="Yearly Income"
-        formDataKey="yearlyIncome"
-        placeholder="most recent yearly income"
-        type="number"
-      />
+      <h2>Applicant Details</h2>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="race"
+          labelText="Race"
+          formDataKey="race"
+          placeholder="select one"
+          type="select"
+          options={Race as readonly string[]}
+        />
+        <FormField
+          {...props}
+          labelId="ethnicity"
+          labelText="Ethnicity"
+          formDataKey="ethnicity"
+          placeholder="select one"
+          type="select"
+          options={Ethnicity as readonly string[]}
+        />
+      </div>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="age"
+          labelText="Age"
+          formDataKey="age"
+          placeholder="applicant's age"
+          type="number"
+        />
+        <FormField
+          {...props}
+          labelId="yearlyIncome"
+          labelText="Yearly Income"
+          formDataKey="yearlyIncome"
+          placeholder="most recent yearly income"
+          type="number"
+        />
+      </div>
+      <div className="flex gap-4 w-full">
       <FormField
         {...props}
         labelId="creditScore"
@@ -144,9 +149,10 @@ const ApplicantDetails = (props: FormProps) => {
         placeholder="enter if applicable"
         type="number"
       />
-      <p className="fake-label">Eviction History</p>
+      </div>
+      <p className="fake-label mt-2">Eviction History</p>
       {Array.from({ length: evictionHistoryRows }).map((_, index) => (
-        <div key={index} className="flex">
+        <div key={index} className="flex gap-4 mb-1">
           <FormField
             {...props}
             labelId="evictionReason"
@@ -181,9 +187,9 @@ const ApplicantDetails = (props: FormProps) => {
       >
         Add another eviction reason
       </button>
-      <p className="fake-label">Criminal History</p>
+      <p className="fake-label mt-2">Criminal History</p>
       {Array.from({ length: criminalHistoryRows }).map((_, index) => (
-        <div key={index} className="flex">
+        <div key={index} className="flex gap-4 mb-1">
           <FormField
             {...props}
             labelId="criminalHistoryType"

@@ -51,56 +51,64 @@ const PropertyDetails = (props: FormProps) => {
 
   return (
     <div>
-      <p>Property Details</p>
-      <FormField
-        {...props}
-        labelId="propertyStreet"
-        labelText="Street"
-        formDataKey="street"
-        type="text"
-      />
-      <FormField
-        {...props}
-        labelId="propertyUnit"
-        labelText="Unit"
-        formDataKey="unit"
-        type="text"
-      />
-      <FormField
-        {...props}
-        labelId="propertyCity"
-        labelText="City"
-        formDataKey="city"
-        type="text"
-      />
-      <FormField
-        {...props}
-        labelId="propertyState"
-        labelText="State"
-        formDataKey="state"
-        type="text"
-      />
-      <FormField
-        {...props}
-        labelId="propertyZipcode"
-        labelText="Zipcode"
-        formDataKey="zipcode"
-        type="number"
-      />
-      <FormField
-        {...props}
-        labelId="propertyMonthlyRent"
-        labelText="Monthly Rent"
-        formDataKey="monthlyRent"
-        type="number"
-      />
-      <FormField
-        {...props}
-        labelId="propertyLandlordName"
-        labelText="Name of property mgr / landlord"
-        formDataKey="landlordName"
-        type="text"
-      />
+      <h2>Property Details</h2>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="propertyStreet"
+          labelText="Street"
+          formDataKey="street"
+          type="text"
+        />
+        <FormField
+          {...props}
+          labelId="propertyUnit"
+          labelText="Unit"
+          formDataKey="unit"
+          type="text"
+        />
+      </div>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="propertyCity"
+          labelText="City"
+          formDataKey="city"
+          type="text"
+        />
+        <FormField
+          {...props}
+          labelId="propertyState"
+          labelText="State"
+          formDataKey="state"
+          type="text"
+        />
+      </div>
+      <div className="w-1/2 pr-2">
+        <FormField
+          {...props}
+          labelId="propertyZipcode"
+          labelText="Zipcode"
+          formDataKey="zipcode"
+          type="number"
+        />
+      </div>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="propertyMonthlyRent"
+          labelText="Monthly Rent"
+          formDataKey="monthlyRent"
+          type="number"
+        />
+        <FormField
+          {...props}
+          labelId="propertyLandlordName"
+          labelText="Name of property mgr / landlord"
+          formDataKey="landlordName"
+          type="text"
+        />
+      </div>
     </div>
   );
 };
