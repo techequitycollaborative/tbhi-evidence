@@ -68,81 +68,89 @@ const ApplicationDetails = (props: FormProps) => {
 
   return (
     <div>
-      <p>Application Details</p>
-      <FormField
-        {...props}
-        labelId="screeningCompanyName"
-        labelText="Name of Screening Company"
-        formDataKey="screeningCompanyName"
-        placeholder="enter name"
-        type="text"
-      />
-      <FormField
-        {...props}
-        labelId="applicationDate"
-        labelText="Application Date"
-        formDataKey="applicationDate"
-        placeholder="date of application"
-        type="date"
-      />
-      <FormField
-        {...props}
-        labelId="screeningFee"
-        labelText="Fee Paid"
-        formDataKey="screeningFee"
-        placeholder="enter fee"
-        type="number"
-      />
-      <FormField
-        {...props}
-        labelId="portableScreeningFee"
-        labelText="Portable Screening Fee"
-        formDataKey="portableScreeningFee"
-        placeholder="yes/no"
-        type="select"
-        options={PortableScreeningFee}
-      />
-      <FormField
-        {...props}
-        labelId="applicationMethod"
-        labelText="Application Method"
-        formDataKey="applicationMethod"
-        placeholder="select one"
-        type="select"
-        options={ApplicationMethod}
-      />
-      <FormField
-        {...props}
-        labelId="assessmentOutcome"
-        labelText="Assessment Outcome"
-        formDataKey="assessmentOutcome"
-        placeholder="accepted/denied"
-        type="select"
-        options={AssessmentOutcome}
-      />
-      <FormField
-        {...props}
-        labelId="assessmentOutcomeDetails"
-        formDataKey="assessmentOutcomeDetails"
-        placeholder="enter details if applicable"
-        type="text"
-      />
-      <FormField
-        {...props}
-        labelId="denialReason"
-        labelText="Reason for denial"
-        formDataKey="denialReason"
-        placeholder="select one"
-        type="select"
-        options={DenialReason}
-      />
-      <FormField
-        {...props}
-        labelId="otherDenialReason"
-        formDataKey="otherDenialReason"
-        placeholder="if other, explain here"
-        type="text"
-      />
+      <h2>Application Details</h2>
+      <div className="flex gap-4 w-full">
+          <FormField
+            {...props}
+            labelId="screeningCompanyName"
+            labelText="Name of Screening Company"
+            formDataKey="screeningCompanyName"
+            placeholder="enter name"
+            type="text"
+          />
+          <FormField
+            {...props}
+            labelId="applicationDate"
+            labelText="Application Date"
+            formDataKey="applicationDate"
+            placeholder="date of application"
+            type="date"
+          />
+        <FormField
+          {...props}
+          labelId="screeningFee"
+          labelText="Fee Paid"
+          formDataKey="screeningFee"
+          placeholder="enter fee"
+          type="number"
+        />
+      </div>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="portableScreeningFee"
+          labelText="Portable Screening Fee"
+          formDataKey="portableScreeningFee"
+          placeholder="yes/no"
+          type="select"
+          options={PortableScreeningFee}
+        />
+        <FormField
+          {...props}
+          labelId="applicationMethod"
+          labelText="Application Method"
+          formDataKey="applicationMethod"
+          placeholder="select one"
+          type="select"
+          options={ApplicationMethod}
+        />
+      </div>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="assessmentOutcome"
+          labelText="Assessment Outcome"
+          formDataKey="assessmentOutcome"
+          placeholder="accepted/denied"
+          type="select"
+          options={AssessmentOutcome}
+        />
+        <FormField
+          {...props}
+          labelId="assessmentOutcomeDetails"
+          formDataKey="assessmentOutcomeDetails"
+          placeholder="enter details if applicable"
+          type="text"
+        />
+      </div>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="denialReason"
+          labelText="Reason for denial"
+          formDataKey="denialReason"
+          placeholder="select one"
+          type="select"
+          options={DenialReason}
+        />
+        <FormField
+          {...props}
+          labelId="otherDenialReason"
+          formDataKey="otherDenialReason"
+          placeholder="if other, explain here"
+          type="text"
+        />
+      </div>
     </div>
   );
 };

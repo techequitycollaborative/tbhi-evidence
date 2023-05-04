@@ -131,21 +131,20 @@
   }
 
   label {
-    @apply text-navy text-xl;
+    @apply text-navy text-lg;
   }
 
-  input {
-    @apply text-navy text-lg bg-blue-gray/90 rounded-md border placeholder-dark-blue-gray p-4;
+  input, select, textarea {
+    @apply text-navy bg-blue-gray/90 rounded-md border-navy border-2 placeholder-dark-blue-gray py-2 px-4 w-full;
   }
 
-  select {
-    @apply text-navy text-lg bg-blue-gray/90 rounded-md border placeholder-dark-blue-gray p-4;
+  input:focus, select:focus {
   }
 }
 
 @layer components {
   .fake-label {
-    @apply text-navy text-xl;
+    @apply text-navy text-lg;
   }
 
   .add-history-btn {

@@ -24,15 +24,15 @@ const AdditionalDetails = (props: FormProps) => {
 
   return (
     <div>
-      <p>Additional Details</p>
-      <p>Please fill out any additional supporting information</p>
+      <h2>Additional Details</h2>
+      <p>Please fill out any additional supporting information. If you believe the reason the applicant was denied housing does not match the reason given by the screening company, please explain.</p>
       <div>
         <FormField
           {...props}
           labelId="additionalContextNotes"
           labelText="Additional context notes"
           formDataKey="additionalContextNotes"
-          type="text"
+          type="textarea"
         />
       </div>
     </div>

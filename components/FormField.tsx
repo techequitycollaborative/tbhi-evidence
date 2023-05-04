@@ -8,8 +8,8 @@ export default function FormField(props: FormFieldProps) {
   const { labelId, labelText, formDataKey, arrayInfo, errors } = props;
 
   return (
-    <div>
-      <div className="h-8">
+    <div className="flex-1">
+      <div className={!labelText || arrayInfo ? "" : "mt-2"}>
         <label
           htmlFor={labelId + (arrayInfo?.index ?? "")}
           className={!labelText || arrayInfo ? "sr-only" : ""}

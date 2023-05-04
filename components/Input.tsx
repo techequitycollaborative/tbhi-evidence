@@ -16,7 +16,7 @@ interface SelectProps extends BaseProps {
   options: readonly string[];
 }
 interface InputProps extends BaseProps {
-  type: "text" | "number" | "email" | "date";
+  type: "text" | "number" | "email" | "date" | 'textarea';
 }
 export type FormInputProps = InputProps | SelectProps;
 
@@ -36,7 +36,7 @@ export default function Input(props: FormInputProps) {
     value = isoDateOnly(value);
   }
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     let newValue: any = e.target.value;
     if (type === "date") {
       newValue = new Date(newValue);
@@ -58,9 +58,9 @@ export default function Input(props: FormInputProps) {
     }
   };
 
-  return (
-    <>
-      {props.type === "select" ? (
+  switch (props.type) {
+    case "select":
+      return (
         <select id={labelId} value={value || "1"} onChange={onChange}>
           <option value="1" disabled>
             {placeholder}
@@ -73,7 +73,18 @@ export default function Input(props: FormInputProps) {
             );
           })}
         </select>
-      ) : (
+      );
+    case "textarea":
+      return (
+        <textarea
+          id={labelId}
+          placeholder={placeholder}
+          value={value || ""}
+          onChange={onChange}
+        />
+      );
+    default:
+      return (
         <input
           id={labelId}
           placeholder={placeholder}
@@ -82,10 +93,10 @@ export default function Input(props: FormInputProps) {
           onChange={onChange}
           onFocus={() => setType(props.type)}
         />
-      )}
-    </>
-  );
+      );
+  }
 }
+
 
 export function updateHistoryArray<T extends Object>(
   array: Array<T>,
