@@ -158,7 +158,7 @@ const ApplicantDetails = (props: FormProps) => {
             labelId="evictionReason"
             formDataKey="evictionHistory"
             type="select"
-            placeholder="select reason"
+            placeholder="select one"
             options={EvictionReason as readonly string[]}
             arrayInfo={{
               index,
@@ -185,7 +185,7 @@ const ApplicantDetails = (props: FormProps) => {
         className="add-history-btn"
         onClick={() => setEvictionHistoryRows((rows) => rows + 1)}
       >
-        Add another eviction reason
+        + Add another eviction
       </button>
       <p className="fake-label mt-2">Criminal History</p>
       {Array.from({ length: criminalHistoryRows }).map((_, index) => (
@@ -195,7 +195,7 @@ const ApplicantDetails = (props: FormProps) => {
             labelId="criminalHistoryType"
             formDataKey="criminalHistory"
             type="select"
-            placeholder="select type"
+            placeholder="select one"
             options={CriminalHistoryType as readonly string[]}
             arrayInfo={{
               index,
@@ -233,7 +233,7 @@ const ApplicantDetails = (props: FormProps) => {
         className="add-history-btn"
         onClick={() => setCriminalHistoryRows((rows) => rows + 1)}
       >
-        Add another criminal history
+        + Add more criminal history
       </button>
     </div>
   );

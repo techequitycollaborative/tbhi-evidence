@@ -171,6 +171,10 @@ const Form: NextPage = () => {
             {`current form data:
   ${JSON.stringify(formData, null, 4)}`}
           </div>
+          <div style={{ whiteSpace: "pre-wrap" }}>
+            {`current error data:
+  ${JSON.stringify(errors, null, 4)}`}
+          </div>
         </div>
       </div>
       <Footer />

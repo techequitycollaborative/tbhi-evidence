@@ -10,14 +10,14 @@ const Nav: NextPage<Props> = function Nav(props) {
     return (
         <div className="w-full">
             <div className="w-full flex">
-                <button className="flex-1 text-left" onClick={props.back}>Back</button>
-                <p className="flex-1">{props.currentPage}/{props.lastPage}</p>
+                <button className="flex-1 text-left text-navy font-bold uppercase text-lg" onClick={props.back}>&lsaquo; Back</button>
+                <p className="flex-1 text-navy font-bold text-lg">{props.currentPage}/{props.lastPage}</p>
             </div>
             <meter
               value={props.currentPage}
               min="0"
               max={props.lastPage}
-              className="w-full"
+              className="w-full h-6"
             />
         </div>
     );
