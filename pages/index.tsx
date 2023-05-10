@@ -11,7 +11,7 @@ import { CriminalHistoryEntry, Eviction, FormData, SubmittableFormData } from "@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : 'https://localhost:8000/';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : 'http://localhost:8000/';
 const SAVE_RECORD_URL = API_URL + 'saveRecord';
 const ALL_PEOPLE_URL =  API_URL + 'people';
 const ALL_APPLICATIONS_URL = API_URL + 'application';
