@@ -11,10 +11,10 @@ import { CriminalHistoryEntry, Eviction, FormData, SubmittableFormData } from "@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 
-// for local dev environment
-const SAVE_RECORD_URL = "http://localhost:8000/saveRecord";
-const ALL_PEOPLE_URL = "http://localhost:8000/people";
-const ALL_APPLICATIONS_URL = "http://localhost:8000/application";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : 'https://localhost:8000/';
+const SAVE_RECORD_URL = API_URL + 'saveRecord';
+const ALL_PEOPLE_URL =  API_URL + 'people';
+const ALL_APPLICATIONS_URL = API_URL + 'application';
 
 enum FormPage {
   Start,
