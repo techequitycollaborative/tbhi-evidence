@@ -11,10 +11,12 @@ const Header: NextPage<Props> = function Header(props) {
         return (
             <div className="w-full bg-blue text-center relative">
                 <div className="w-1/2 min-w-[600px] m-auto relative py-4">
-                    <Image
-                        src={logo}
-                        alt="TBHI Logo"
-                    />
+                    <div className="w-[65%]">
+                        <Image
+                            src={logo}
+                            alt="TBHI Logo"
+                        />
+                    </div>
                     <h2 className="text-white text-center ml-[40%]">Evidence collection form</h2>
                 </div>
             </div>

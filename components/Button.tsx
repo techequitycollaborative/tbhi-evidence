@@ -9,7 +9,7 @@ interface Props {
 const Button: NextPage<Props> = function Button(props) {
     return (
     	<div className="">
-	        <button className="w-full text-xl bg-orange text-white uppercase rounded-md font-bold p-2 my-4" disabled={props.disabled} onClick={props.onClick}>
+	        <button className="w-full text-xl border-2 border-orange bg-orange text-white uppercase rounded-md font-bold p-1 my-4 disabled:opacity-70 hover:bg-white hover:text-orange" disabled={props.disabled} onClick={props.onClick}>
 	            {props.children}
 	        </button>
 	    </div>

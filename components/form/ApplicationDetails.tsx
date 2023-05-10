@@ -48,13 +48,13 @@ export function validateApplication(formData: any): { [key: string]: string } {
     errors.assessmentOutcome = "Assessment outcome answer must be from provided list";
   }
 
-  if (formData.assessmentOutcome === "denied") {
+  if (formData.assessmentOutcome === "Denied") {
     if (!formData.denialReason) {
       errors.denialReason = "Denial reason is required";
     } else if (!DenialReason.includes(formData.denialReason)) {
       errors.denialReason = "Denial reason must be from provided list";
-    } else if (formData.denialReason === "other" && !formData.denialReasonOther) {
-      errors.denialReasonOther = "Denial reason explanation is required";
+    } else if (formData.denialReason === "Other" && !formData.otherDenialReason) {
+      errors.otherDenialReason = "Denial reason explanation is required";
     }
   }
 
@@ -101,7 +101,7 @@ const ApplicationDetails = (props: FormProps) => {
           labelId="portableScreeningFee"
           labelText="Portable Screening Fee"
           formDataKey="portableScreeningFee"
-          placeholder="yes/no"
+          placeholder="select one"
           type="select"
           options={PortableScreeningFee}
         />
@@ -121,13 +121,14 @@ const ApplicationDetails = (props: FormProps) => {
           labelId="assessmentOutcome"
           labelText="Assessment Outcome"
           formDataKey="assessmentOutcome"
-          placeholder="accepted/denied"
+          placeholder="select one"
           type="select"
           options={AssessmentOutcome}
         />
         <FormField
           {...props}
           labelId="assessmentOutcomeDetails"
+          labelText="&nbsp;"
           formDataKey="assessmentOutcomeDetails"
           placeholder="enter details if applicable"
           type="text"
@@ -146,6 +147,7 @@ const ApplicationDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="otherDenialReason"
+          labelText="&nbsp;"
           formDataKey="otherDenialReason"
           placeholder="if other, explain here"
           type="text"
