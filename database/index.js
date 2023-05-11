@@ -94,7 +94,7 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
       ]
     );
     await Promise.all(
-      data.evictionHistory.map(async (eviction) => {
+      data.evictionHistory?.map(async (eviction) => {
         await client.query(
           `INSERT INTO form.eviction (person_id, eviction_date, reason)
           VALUES ($1, $2, $3)`,
@@ -103,7 +103,7 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
       })
     );
     await Promise.all(
-      data.criminalHistory.map(async (conviction) => {
+      data.criminalHistory?.map(async (conviction) => {
         await client.query(
           `INSERT INTO form.criminal_history (person_id, type, conviction_date, offense)
           VALUES ($1, $2, $3, $4)`,

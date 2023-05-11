@@ -20,8 +20,8 @@ export interface SubmittableFormData {
   yearlyIncome?: number;
   creditScore?: number;
   rentalDebt?: number;
-  evictionHistory: Array<Eviction>;
-  criminalHistory: Array<CriminalHistoryEntry>;
+  evictionHistory?: Array<Eviction>;
+  criminalHistory?: Array<CriminalHistoryEntry>;
   street: string;
   unit: string;
   city: string;
