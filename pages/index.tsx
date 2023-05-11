@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import Nav from "@/components/Nav";
 import Button from "@/components/Button";
 import Footer from "@/components/Footer";
-import AdditionalDetails, { validateAll } from "@/components/form/AdditionalDetails";
 import ApplicantDetails, { validateApplicant } from "@/components/form/ApplicantDetails";
 import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
 import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
@@ -20,9 +19,8 @@ const ALL_APPLICATIONS_URL = API_URL + 'application';
 enum FormPage {
   Start,
   ApplicantDetails,
-  PropertyDetails,
   ApplicationDetails,
-  AdditionalDetails,
+  PropertyDetails,
   ThankYou,
 }
 
@@ -76,38 +74,54 @@ const Form: NextPage = () => {
         return validateStart(formData);
       case FormPage.ApplicantDetails:
         return validateApplicant(formData);
-      case FormPage.PropertyDetails:
-        return validateProperty(formData);
       case FormPage.ApplicationDetails:
         return validateApplication(formData);
-      case FormPage.AdditionalDetails:
-        return validateAll(formData);
+      case FormPage.PropertyDetails:
+        return validateProperty(formData);
       default:
         return {};
     }
   }
 
-  function handleSubmit() {
-    try {
-      const r = fetch(SAVE_RECORD_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      r.then((response) => {
-        if (response.ok) {
-          console.log("submit succeeded");
-        } else {
-          console.log("submit failed");
-        }
-      });
+  function validateAll(formData: any): { [key: string]: string } {
+    const errors = {
+      ...validateStart(formData),
+      ...validateApplicant(formData),
+      ...validateProperty(formData),
+      ...validateApplication(formData),
+    };
+    // any final validation needed?
+    return errors;
+  }
 
-      setStep(step + 1);
-    } catch (err: any) {
-      console.log(err.message);
+  function handleSubmit() {
+    const errors = validateAll(formData);
+    if (Object.keys(errors).length === 0) {
+      setErrors(null);
+      try {
+        const r = fetch(SAVE_RECORD_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+        r.then((response) => {
+          if (response.ok) {
+            console.log("submit succeeded");
+          } else {
+            console.log("submit failed");
+          }
+        });
+
+        setStep(step + 1);
+      } catch (err: any) {
+        console.log(err.message);
+      }
+    } else {
+      setErrors(errors);
+      setNextDisabled(true);
     }
   }
 
@@ -126,8 +140,6 @@ const Form: NextPage = () => {
         return <PropertyDetails {...formProps} />;
       case FormPage.ApplicationDetails:
         return <ApplicationDetails {...formProps} />;
-      case FormPage.AdditionalDetails:
-        return <AdditionalDetails {...formProps} />;
       case FormPage.ThankYou:
         return <div>thank you goes here</div>;
     }
@@ -138,10 +150,9 @@ const Form: NextPage = () => {
       case FormPage.Start:
         return <Button onClick={handleNext}>start</Button>
       case FormPage.ApplicantDetails:
-      case FormPage.PropertyDetails:
       case FormPage.ApplicationDetails:
         return <Button disabled={nextDisabled} onClick={handleNext}>next</Button>;
-      case FormPage.AdditionalDetails:
+      case FormPage.PropertyDetails:
         return <Button onClick={handleSubmit}>submit</Button>
       case FormPage.ThankYou:
         return <div>submit another</div>;
@@ -150,10 +161,10 @@ const Form: NextPage = () => {
 
   return (
     <div>
-      <Header logo={step > 0 && step <= 4 ? false : true} />
+      <Header logo={step > 0 && step <= 3 ? false : true} />
       <div className="w-1/2 min-w-[600px] mx-auto mt-16 pb-20">
-        {step > 0 && step <= 4 ? (
-          <Nav currentPage={step} lastPage={4} back={handleBack} />
+        {step > 0 && step <= 3 ? (
+          <Nav currentPage={step} lastPage={3} back={handleBack} />
         ) : (
           null
         )}
