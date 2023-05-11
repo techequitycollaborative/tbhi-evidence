@@ -61,16 +61,16 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
   try {
     await client.query("BEGIN");
     const result = await client.query(
-      `INSERT INTO form.person (organization, email, race, ethnicity, age, income, credit_score, rental_debt)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `INSERT INTO form.person (organization, email, user_type, race, ethnicity, age, income, credit_score, rental_debt)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING person_id`,
-      [data.organization, data.email, data.race, data.ethnicity, data.age, data.yearlyIncome, data.creditScore, data.rentalDebt]
+      [data.organization, data.email, data.userType, data.race, data.ethnicity, data.age, data.yearlyIncome, data.creditScore, data.rentalDebt]
     );
     const personId = result.rows[0]["person_id"];
     await client.query(
       `INSERT INTO form.application
-      (person_id, application_date, street, unit, city, state, zipcode, rent, property_manager, screening_company, fee, fee_type, application_method, assessment_outcome, assessment_details, denial_reason, denial_details, additional_details)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
+      (person_id, application_date, street, unit, city, state, zipcode, rent, property_manager, screening_company, fee, fee_type, application_method, assessment_outcome, assessment_details, denial_reason, denial_details, alternate_denial_notes, additional_details)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`,
       [
         personId,
         data.applicationDate,
@@ -80,7 +80,7 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
         data.state,
         data.zipcode,
         data.monthlyRent,
-        data.landlordName,
+        data.propertyManagementCompany,
         data.screeningCompanyName,
         data.screeningFee,
         data.portableScreeningFee,
@@ -89,6 +89,7 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
         data.assessmentOutcomeDetails,
         data.denialReason,
         data.otherDenialReason,
+        data.alternateDenialNotes,
         data.additionalContextNotes,
       ]
     );

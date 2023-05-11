@@ -6,11 +6,14 @@ import {
   EvictionReason,
   Race,
   Ethnicity,
+  Organization,
 } from "./formoptions";
 
 // TODO: use this type in final validation step so that a type error occurs if a field is missing
 export interface SubmittableFormData {
   email: string;
+  userType: string;
+  organization?: Organization;
   race: Race;
   ethnicity: Ethnicity;
   age?: number;
@@ -25,16 +28,17 @@ export interface SubmittableFormData {
   state: string;
   zipcode: number;
   monthlyRent?: number;
-  landlordName: string;
+  propertyManagementCompany: string;
   screeningCompanyName: string;
   screeningFee?: number;
-  portableScreeningFee?: "Yes" | "No";
+  portableScreeningFee?: string;
   applicationMethod?: ApplicationMethod;
   assessmentOutcome?: AssessmentOutcome;
   assessmentOutcomeDetails?: string;
   denialReason?: DenialReason;
   applicationDate?: Date;
   otherDenialReason?: string;
+  alternateDenialNotes?: string;
   additionalContextNotes?: string;
 }
 

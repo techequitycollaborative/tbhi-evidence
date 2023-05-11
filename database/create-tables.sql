@@ -9,6 +9,7 @@ create table if not exists form.person (
 	person_id serial primary key,
 	organization varchar(50),
 	email varchar(50),
+	user_type varchar(50),
 	race varchar(50),
 	ethnicity varchar(50),
 	age int,
@@ -36,6 +37,7 @@ create table if not exists form.application (
 	assessment_details text,
 	denial_reason varchar(50),
 	denial_details text,
+	alternate_denial_notes text,
 	additional_details text,
 	constraint application_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );

@@ -144,6 +144,10 @@
     @apply text-navy bg-blue-gray/90 rounded-md border-navy border-2 placeholder-dark-blue-gray py-2 px-4 w-full bg-lightgray;
   }
 
+  textarea {
+    @apply h-28;
+  }
+
   input:focus, select:focus {
   }
 }
