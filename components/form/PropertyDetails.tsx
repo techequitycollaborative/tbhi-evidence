@@ -36,11 +36,6 @@ export function validateProperty(formData: any): { [key: string]: string } {
     errors.monthlyRent = "Monthly rent must be a non-negative number.";
   }
 
-  // checking for first and last name at least
-  if (!formData.landlordName || formData.landlordName.split(" ").length < 2) {
-    errors.landlordName = "Landlord name is required";
-  }
-
   return errors;
 }
 
@@ -103,9 +98,9 @@ const PropertyDetails = (props: FormProps) => {
         />
         <FormField
           {...props}
-          labelId="propertyLandlordName"
-          labelText="Name of property mgr / landlord"
-          formDataKey="landlordName"
+          labelId="propertyManagementCompany"
+          labelText="Property Management Company"
+          formDataKey="propertyManagementCompany"
           type="text"
         />
       </div>

@@ -11,6 +11,7 @@ import { CriminalHistoryEntry, Eviction, FormData, SubmittableFormData } from "@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 
+const DEBUG = process.env.NEXT_PUBLIC_DEBUG ? process.env.NEXT_PUBLIC_DEBUG : "true";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL : 'http://localhost:8000/';
 const SAVE_RECORD_URL = API_URL + 'saveRecord';
 const ALL_PEOPLE_URL =  API_URL + 'people';
@@ -160,22 +161,26 @@ const Form: NextPage = () => {
         <div className="mb-8">
           {nextButton(step)}
         </div>
-        <div>
+        {
+          DEBUG === 'true' ? (
           <div>
-            <button onClick={testSubmit}>TEST SUBMIT</button>
+            <div>
+              <button onClick={testSubmit}>TEST SUBMIT</button>
+            </div>
+            <div>
+              <button onClick={testFetch}>TEST FETCH</button>
+            </div>
+            <div style={{ whiteSpace: "pre-wrap" }}>
+              {`current form data:
+    ${JSON.stringify(formData, null, 4)}`}
+            </div>
+            <div style={{ whiteSpace: "pre-wrap" }}>
+              {`current error data:
+    ${JSON.stringify(errors, null, 4)}`}
+            </div>
           </div>
-          <div>
-            <button onClick={testFetch}>TEST FETCH</button>
-          </div>
-          <div style={{ whiteSpace: "pre-wrap" }}>
-            {`current form data:
-  ${JSON.stringify(formData, null, 4)}`}
-          </div>
-          <div style={{ whiteSpace: "pre-wrap" }}>
-            {`current error data:
-  ${JSON.stringify(errors, null, 4)}`}
-          </div>
-        </div>
+          ) : (null)
+        }
       </div>
       <Footer />
     </div>
@@ -193,6 +198,9 @@ function testSubmit() {
       },
       body: JSON.stringify({
         email: "conrad@madeup.biz",
+        userType: "individual",
+        organization: "Organization 1",
+        applicationDate: new Date("2021-01-01"),
         race: "Black or African American",
         age: 50,
         yearlyIncome: 100000,
@@ -228,11 +236,12 @@ function testSubmit() {
         screeningCompanyName: "joey's screening",
         screeningFee: 100,
         portableScreeningFee: "Yes",
-        applicationMethod: "Method 1",
+        applicationMethod: "Online",
         assessmentOutcome: "Denied",
         assessmentOutcomeDetails: "didn't like me",
         denialReason: "Other",
         otherDenialReason: "didn't like me",
+        alternateDenialNotes: "didn't like me",
         additionalContextNotes: "joey is not cool",
       } as FormData),
     });

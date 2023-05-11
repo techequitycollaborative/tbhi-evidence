@@ -138,7 +138,7 @@ const ApplicationDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="denialReason"
-          labelText="Reason for denial"
+          labelText="Reason Provided for Denial"
           formDataKey="denialReason"
           placeholder="select one"
           type="select"
@@ -152,6 +152,28 @@ const ApplicationDetails = (props: FormProps) => {
           placeholder="if other, explain here"
           type="text"
         />
+      </div>
+      <div className="flex gap-4 w-full">
+        <div className="flex-1">
+          <FormField
+            {...props}
+            labelId="alternateDenialNotes"
+            labelText="Application Denial Notes"
+            formDataKey="alternateDenialNotes"
+            placeholder="If you believe you were denied for a reason other than the one provided on your application, please explain"
+            type="textarea"
+          />
+        </div>
+        <div className="flex-1">
+          <FormField
+            {...props}
+            labelId="additionalContextNotes"
+            labelText="Additional Context"
+            formDataKey="additionalContextNotes"
+            placeholder="Please share any additional notes about your application"
+            type="textarea"
+          />
+        </div>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ const Header: NextPage<Props> = function Header(props) {
                             alt="TBHI Logo"
                         />
                     </div>
-                    <h2 className="text-white text-center ml-[40%]">Evidence collection form</h2>
+                    <h2 className="text-white text-center ml-[30%]">Housing Outcome Submission Form</h2>
                 </div>
             </div>
         );
@@ -25,7 +25,7 @@ const Header: NextPage<Props> = function Header(props) {
     else {
         return (
             <div className="w-full bg-blue text-center relative py-2">
-                <h2 className="text-white text-center">TBHI Evidence collection form</h2>
+                <h2 className="text-white text-center">Housing Outcome Submission Form</h2>
             </div>
         );
     }
