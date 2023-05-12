@@ -1,7 +1,7 @@
 import FormField from "@/components/FormField";
 import { FormProps } from "@/pages";
 import { FormData } from "@/types/formdata";
-import { CriminalHistoryType, EvictionReason, Race, Ethnicity } from "@/types/formoptions";
+import { CriminalHistoryType, Ethnicity, EvictionReason, Race } from "@/types/formoptions";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -88,8 +88,12 @@ const ApplicantDetails = (props: FormProps) => {
     mode: "all",
   });
 
-  const [criminalHistoryRows, setCriminalHistoryRows] = useState(1);
-  const [evictionHistoryRows, setEvictionHistoryRows] = useState(1);
+  const [criminalHistoryRows, setCriminalHistoryRows] = useState(
+    props.formData.criminalHistory?.length ?? 1
+  );
+  const [evictionHistoryRows, setEvictionHistoryRows] = useState(
+    props.formData.evictionHistory?.length ?? 1
+  );
 
   return (
     <div>
@@ -133,22 +137,22 @@ const ApplicantDetails = (props: FormProps) => {
         />
       </div>
       <div className="flex gap-4 w-full">
-      <FormField
-        {...props}
-        labelId="creditScore"
-        labelText="Credit Score"
-        formDataKey="creditScore"
-        placeholder="enter a number between 300 - 850"
-        type="number"
-      />
-      <FormField
-        {...props}
-        labelId="rentalDebt"
-        labelText="Rental Debt"
-        formDataKey="rentalDebt"
-        placeholder="enter if applicable"
-        type="number"
-      />
+        <FormField
+          {...props}
+          labelId="creditScore"
+          labelText="Credit Score"
+          formDataKey="creditScore"
+          placeholder="enter a number between 300 - 850"
+          type="number"
+        />
+        <FormField
+          {...props}
+          labelId="rentalDebt"
+          labelText="Rental Debt"
+          formDataKey="rentalDebt"
+          placeholder="enter if applicable"
+          type="number"
+        />
       </div>
       <p className="fake-label mt-2">Eviction History</p>
       {Array.from({ length: evictionHistoryRows }).map((_, index) => (

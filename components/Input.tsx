@@ -16,14 +16,12 @@ interface SelectProps extends BaseProps {
   options: readonly string[];
 }
 interface InputProps extends BaseProps {
-  type: "text" | "number" | "email" | "date" | 'textarea';
+  type: "text" | "number" | "email" | "date" | "textarea";
 }
 export type FormInputProps = InputProps | SelectProps;
 
 export default function Input(props: FormInputProps) {
   const { formData, setFormData, labelId, formDataKey, placeholder, arrayInfo } = props;
-
-  const [type, setType] = useState(props.type === "select" ? "select" : "text");
 
   let value: any;
   if (arrayInfo) {
@@ -32,24 +30,30 @@ export default function Input(props: FormInputProps) {
     value = formData[formDataKey] as string | number | undefined;
   }
 
+  const [type, setType] = useState(
+    props.type === "select" ? "select" : props.type === "date" && !!value ? "date" : "text"
+  );
   if (type === "date") {
     value = isoDateOnly(value);
   }
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     let newValue: any = e.target.value;
     if (type === "date") {
       newValue = new Date(newValue);
     }
 
     if (arrayInfo) {
-      const newFormData: FormData = {
-        ...formData,
-      };
-      updateHistoryArray(newFormData[formDataKey] as Array<any>, arrayInfo.index, {
-        [arrayInfo.keyAtIndex]: newValue,
-      });
-      setFormData(newFormData);
+      const history = updateHistoryArray(
+        formData[formDataKey] as Array<any> | undefined,
+        arrayInfo.index,
+        {
+          [arrayInfo.keyAtIndex]: newValue,
+        }
+      );
+      setFormData({ ...formData, [formDataKey]: history });
     } else {
       setFormData({
         ...formData,
@@ -76,12 +80,7 @@ export default function Input(props: FormInputProps) {
       );
     case "textarea":
       return (
-        <textarea
-          id={labelId}
-          placeholder={placeholder}
-          value={value || ""}
-          onChange={onChange}
-        />
+        <textarea id={labelId} placeholder={placeholder} value={value || ""} onChange={onChange} />
       );
     default:
       return (
@@ -97,12 +96,15 @@ export default function Input(props: FormInputProps) {
   }
 }
 
-
 export function updateHistoryArray<T extends Object>(
-  array: Array<T>,
+  array: Array<T> | undefined,
   index: number,
   update: Object
-) {
+): Array<T> {
+  if (!array) {
+    array = [];
+  }
+
   if (array[index] !== undefined) {
     array[index] = { ...array[index], ...update };
   } else {
