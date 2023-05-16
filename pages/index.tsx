@@ -6,6 +6,7 @@ import ApplicantDetails, { validateApplicant } from "@/components/form/Applicant
 import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
 import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
 import Start, { validateStart } from "@/components/form/Start";
+import ThankYou from "@/components/form/ThankYou";
 import { testFetchApplications, testFetchPeople, testSubmit } from "@/dev/testDBFunctions";
 import { CriminalHistoryEntry, Eviction, FormData } from "@/types/formdata";
 import { NextPage } from "next";
@@ -195,7 +196,7 @@ const Form: NextPage = () => {
       case FormPage.ApplicationDetails:
         return <ApplicationDetails {...formProps} />;
       case FormPage.ThankYou:
-        return <div>thank you goes here</div>;
+        return <ThankYou />;
     }
   }
 
@@ -213,7 +214,7 @@ const Form: NextPage = () => {
       case FormPage.PropertyDetails:
         return <Button onClick={handleSubmit}>submit</Button>;
       case FormPage.ThankYou:
-        return <div>submit another</div>;
+        return <Button onClick={handleStartOver}>submit another</Button>;;
     }
   }
 
