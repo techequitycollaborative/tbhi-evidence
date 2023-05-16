@@ -6,6 +6,7 @@ import ApplicantDetails, { validateApplicant } from "@/components/form/Applicant
 import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
 import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
 import Start, { validateStart } from "@/components/form/Start";
+import ThankYou from "@/components/form/ThankYou";
 import { testFetchApplications, testFetchPeople, testSubmit } from "@/dev/testDBFunctions";
 import { CriminalHistoryEntry, Eviction, FormData } from "@/types/formdata";
 import { NextPage } from "next";
@@ -65,6 +66,8 @@ const Form: NextPage = () => {
   const [_step, setStep] = useState<number>();
   const step = _step || FormPage.Start;
 
+  const [layout, setLayout] = useState("paged");
+
   // Handle navigation with/ browser back and refresh support.
   //
   // Refresh is jerky due to instantiating the form initially to page 0 and then jumping to the correct page,
@@ -73,7 +76,7 @@ const Form: NextPage = () => {
   const router = useRouter();
   useEffect(() => {
     if (_step !== undefined) {
-      router.push("?page=" + _step, undefined, { shallow: true });
+      router.push("?page=" + _step + "&layout=" + layout, undefined, { shallow: true });
     }
   }, [_step]);
   useEffect(() => {
@@ -84,6 +87,11 @@ const Form: NextPage = () => {
     // ensure no one sees next incorrectly disabled
     setNextDisabled(false);
   }, [router.query.page, router.isReady]);
+  useEffect(() => {
+    if (!router.isReady) return;
+    const currentLayout = (router.query.layout === "single" || router.query.layout === "embed" || router.query.layout === "paged" ? router.query.layout : "paged");
+    setLayout(currentLayout);
+  }, [router.query.layout, router.isReady]);
 
   const [errors, setErrors] = useState(null as any);
   const [nextDisabled, setNextDisabled] = useState(false);
@@ -96,6 +104,11 @@ const Form: NextPage = () => {
       setStep(step - 1);
       setNextDisabled(false);
     }
+  }
+
+  function handleStartOver() {
+    setStep(0);
+    setFormData({});
   }
 
   function handleNext() {
@@ -164,7 +177,8 @@ const Form: NextPage = () => {
           }
         });
 
-        setStep(step + 1);
+        setStep(FormPage.ThankYou);
+        setFormData({});
       } catch (err: any) {
         console.log(err.message);
       }
@@ -190,7 +204,7 @@ const Form: NextPage = () => {
       case FormPage.ApplicationDetails:
         return <ApplicationDetails {...formProps} />;
       case FormPage.ThankYou:
-        return <div>thank you goes here</div>;
+        return <ThankYou />;
     }
   }
 
@@ -208,42 +222,132 @@ const Form: NextPage = () => {
       case FormPage.PropertyDetails:
         return <Button onClick={handleSubmit}>submit</Button>;
       case FormPage.ThankYou:
-        return <div>submit another</div>;
+        return <Button onClick={handleStartOver}>submit another</Button>;
     }
   }
 
-  return (
-    <div>
-      <Header logo={step > 0 && step <= 3 ? false : true} />
-      <div className="w-1/2 min-w-[600px] mx-auto mt-16 pb-20">
-        {step > 0 && step <= 3 ? <Nav currentPage={step} lastPage={3} back={handleBack} /> : null}
-        <div className="mt-8">{formContent(step)}</div>
-        <div className="mb-8">{nextButton(step)}</div>
-        {DEBUG === "true" ? (
-          <div>
-            <div>
-              <button onClick={testSubmit}>TEST SUBMIT</button>
-            </div>
-            <div>
-              <button onClick={testFetchApplications}>TEST FETCH APPLICATIONS</button>
-            </div>
-            <div>
-              <button onClick={testFetchPeople}>TEST FETCH PEOPLE</button>
-            </div>
-            <div style={{ whiteSpace: "pre-wrap" }}>
-              {`current form data:
-    ${JSON.stringify(formData, null, 4)}`}
-            </div>
-            <div style={{ whiteSpace: "pre-wrap" }}>
-              {`current error data:
-    ${JSON.stringify(errors, null, 4)}`}
-            </div>
-          </div>
-        ) : null}
+  function pagedLayout() {
+    return (
+      <div>
+        <Header logo={step > 0 && step <= 3 ? false : true} />
+        <div className="w-1/2 min-w-[600px] mx-auto mt-16 pb-20">
+          {step > 0 && step <= 3 ? <Nav currentPage={step} lastPage={3} back={handleBack} startover={handleStartOver} /> : null}
+          <div className="mt-8">{formContent(step)}</div>
+          <div className="mb-8">{nextButton(step)}</div>
+          {debug()}
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  );
+    );
+  }
+
+  function singleLayout() {
+    const formProps: FormProps = {
+      formData: formData ?? {},
+      setFormData,
+      errors,
+    };
+    return (
+      <div>
+        <Header logo={true} />
+        <div className="w-1/2 min-w-[600px] mx-auto mt-16 pb-20">
+          {
+            step === FormPage.ThankYou ?
+            (
+              <>
+                <ThankYou />
+                <Button onClick={handleStartOver}>submit another</Button>
+              </>
+            ) : (
+              <>
+                <Start {...formProps} />
+                <br />
+                <ApplicantDetails {...formProps} />
+                <br />
+                <ApplicationDetails {...formProps} />
+                <br />
+                <PropertyDetails {...formProps} />
+                <Button onClick={handleSubmit}>submit</Button>
+              </>
+            )
+          }
+          {debug()}
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  function embedLayout() {
+    const formProps: FormProps = {
+      formData: formData ?? {},
+      setFormData,
+      errors,
+    };
+    return (
+      <div className="w-1/2 min-w-[600px] mx-auto mt-16 pb-20">
+        {
+          step === FormPage.ThankYou ?
+          (
+            <>
+              <ThankYou />
+              <Button onClick={handleStartOver}>submit another</Button>
+            </>
+          ) : (
+            <>
+              <Start {...formProps} />
+              <br />
+              <ApplicantDetails {...formProps} />
+              <br />
+              <ApplicationDetails {...formProps} />
+              <br />
+              <PropertyDetails {...formProps} />
+              <Button onClick={handleSubmit}>submit</Button>
+            </>
+          )
+        }
+        {debug()}
+      </div>
+    );
+  }
+
+  function debug() {
+    if (DEBUG === "true") {
+      return (
+        <div>
+          <div>
+            <button onClick={testSubmit}>TEST SUBMIT</button>
+          </div>
+          <div>
+            <button onClick={testFetchApplications}>TEST FETCH APPLICATIONS</button>
+          </div>
+          <div>
+            <button onClick={testFetchPeople}>TEST FETCH PEOPLE</button>
+          </div>
+          <div style={{ whiteSpace: "pre-wrap" }}>
+            {`current form data:
+  ${JSON.stringify(formData, null, 4)}`}
+          </div>
+          <div style={{ whiteSpace: "pre-wrap" }}>
+            {`current error data:
+  ${JSON.stringify(errors, null, 4)}`}
+          </div>
+        </div>
+      );
+    }
+    else return null;
+  }
+
+  switch (layout) {
+    case "single":
+      return singleLayout();
+    case "paged":
+      return pagedLayout();
+    case "embed":
+      return embedLayout();
+    default:
+      return pagedLayout();
+  }
 };
 
 export default Form;
