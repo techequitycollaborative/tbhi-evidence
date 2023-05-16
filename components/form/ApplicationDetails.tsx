@@ -5,6 +5,8 @@ import {
   AssessmentOutcome,
   DenialReason,
   PortableScreeningFee,
+  HousingVoucher,
+  IncomeCertification,
 } from "@/types/formoptions";
 import { useForm } from "react-hook-form";
 
@@ -25,9 +27,9 @@ export function validateApplication(formData: any): { [key: string]: string } {
   }
 
   if (!formData.screeningFee) {
-    errors.screeningFee = "Screening fee is required";
+    errors.screeningFee = "Costs paid is required";
   } else if (!parseInt(formData.screeningFee) || parseInt(formData.screeningFee) < 0) {
-    errors.screeningFee = "Screening fee must be a non-negative number.";
+    errors.screeningFee = "Costs paid must be a non-negative number.";
   }
 
   if (!formData.portableScreeningFee) {
@@ -69,11 +71,12 @@ const ApplicationDetails = (props: FormProps) => {
   return (
     <div>
       <h2>Application Details</h2>
+      <p className="text-center text-navy italic">* = required field</p>
       <div className="flex gap-4 w-full">
           <FormField
             {...props}
             labelId="screeningCompanyName"
-            labelText="Name of Screening Company"
+            labelText="Name of Screening Company*"
             formDataKey="screeningCompanyName"
             placeholder="enter name"
             type="text"
@@ -81,45 +84,79 @@ const ApplicationDetails = (props: FormProps) => {
           <FormField
             {...props}
             labelId="applicationDate"
-            labelText="Application Date"
+            labelText="Application Date*"
             formDataKey="applicationDate"
             placeholder="date of application"
             type="date"
           />
-        <FormField
-          {...props}
-          labelId="screeningFee"
-          labelText="Fee Paid"
-          formDataKey="screeningFee"
-          placeholder="enter fee"
-          type="number"
-        />
       </div>
       <div className="flex gap-4 w-full">
         <FormField
           {...props}
+          labelId="screeningFee"
+          labelText="Costs Paid to Apply*"
+          formDataKey="screeningFee"
+          placeholder="total $ spent on this application"
+          type="number"
+        />
+        <FormField
+          {...props}
           labelId="portableScreeningFee"
-          labelText="Portable Screening Fee"
+          labelText="Portable Screening Fee*"
           formDataKey="portableScreeningFee"
           placeholder="select one"
           type="select"
           options={PortableScreeningFee}
         />
+      </div>
+      <div className="flex gap-4 w-full">
+        <div className="flex-1">
+          <FormField
+            {...props}
+            labelId="applicationMethod"
+            labelText="Application Method*"
+            formDataKey="applicationMethod"
+            placeholder="select one"
+            type="select"
+            options={ApplicationMethod}
+          />
+        </div>
+        <div className={props.formData?.applicationMethod === "Online" ? "flex-1 visible" : "flex-1 invisible"}>
+          <FormField
+            {...props}
+            labelId="portalName"
+            labelText="Name of Online Portal"
+            formDataKey="portalName"
+            placeholder="enter the name of the online portal"
+            type="text"
+          />
+        </div>
+      </div>
+      <div className="flex gap-4 w-full">
         <FormField
           {...props}
-          labelId="applicationMethod"
-          labelText="Application Method"
-          formDataKey="applicationMethod"
+          labelId="housingVoucher"
+          labelText="Do You Have a Housing Voucher?"
+          formDataKey="housingVoucher"
           placeholder="select one"
           type="select"
-          options={ApplicationMethod}
+          options={HousingVoucher}
+        />
+        <FormField
+          {...props}
+          labelId="incomeCertification"
+          labelText="Income Certification"
+          formDataKey="incomeCertification"
+          placeholder="select one"
+          type="select"
+          options={IncomeCertification}
         />
       </div>
       <div className="flex gap-4 w-full">
         <FormField
           {...props}
           labelId="assessmentOutcome"
-          labelText="Assessment Outcome"
+          labelText="Assessment Outcome*"
           formDataKey="assessmentOutcome"
           placeholder="select one"
           type="select"

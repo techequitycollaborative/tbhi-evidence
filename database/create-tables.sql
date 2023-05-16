@@ -7,36 +7,40 @@
 
 create table if not exists form.person (
 	person_id serial primary key,
-	organization varchar(50),
-	email varchar(50),
-	user_type varchar(50),
-	race varchar(50),
-	ethnicity varchar(50),
+	organization text,
+	email text,
+	user_type text,
+	share_consent text,
+	race text,
+	ethnicity text,
 	age int,
 	income int,
-	credit_score int,
-	rental_debt int
+	credit_score text,
+	rental_debt text
 );
 
 create table if not exists form.application (
 	application_id serial primary key,
 	person_id int,
 	form_submission_date timestamptz,
-	street varchar(50),
-	unit varchar(50),
-	city varchar(50),
-	"state" varchar(15),
-	zipcode int constraint zip_five_digits check (zipcode > 999 and zipcode < 100000),
+	street text,
+	unit text,
+	city text,
+	"state" text,
+	zipcode text,
 	rent int,
-	property_manager varchar(50),
-	screening_company varchar(50),
+	property_manager text,
+	screening_company text,
 	application_date date,
 	fee int,
 	fee_type varchar(3),
-	application_method varchar(50),
-	assessment_outcome varchar(10),
+	application_method text,
+	portal_name text,
+	housing_voucher text,
+	income_certification text,
+	assessment_outcome text,
 	assessment_details text,
-	denial_reason varchar(50),
+	denial_reason text,
 	denial_details text,
 	alternate_denial_notes text,
 	additional_details text,
@@ -47,15 +51,15 @@ create table if not exists form.eviction (
 	eviction_id serial primary key,
 	person_id int,
 	eviction_date date,
-	reason varchar(50),
+	reason text,
 	constraint eviction_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );
 
 create table if not exists form.criminal_history (
 	criminal_history_id serial primary key,
 	person_id int,
-	"type" varchar(50),
+	"type" text,
 	conviction_date date,
-	offense varchar(50),
+	offense text,
 	constraint criminal_history_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );

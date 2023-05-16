@@ -34,6 +34,7 @@ function Start(props: FormProps) {
   });
 
   const [privacyOption, setPrivacyOption] = useState(props.formData.userType);
+  const [shareConsent, setShareConsent] = useState("no");
 
   const emailFieldProps: FormFieldProps = {
     ...props,
@@ -86,11 +87,17 @@ function Start(props: FormProps) {
     }
   }
 
+  function handleConsentClick() {
+    const newValue = shareConsent === "yes" ? "no" : "yes";
+    props.setFormData({...props.formData, shareConsent: newValue});
+    setShareConsent(newValue);
+  }
+
   return (
     <>
       <p>Welcome to the TBHI housing outcome submission form, where you may submit details of an application for yourself or on behalf of an applicant. Please have applicant, property, application details ready.</p>
-      <p className="my-2">Please read the <a className="font-bold hover:opacity-70 text-blue" target="_blank" href="privacy">privacy policy</a>.</p>
-      <p className="my-2">You may remove your consent and participation in the research at any time by emailing <a className="text-blue font-bold hover:opacity-70" href="mailto:research@techequitycollaborative.org">research@techequitycollaborative.org</a>. If you choose to do so, TechEquity will delete your data within 21 days of receiving your request.</p>
+      <h3 className="font-bold mt-4 text-xl">Privacy Policy</h3>
+      <p className="my-2">Please read the <a className="font-bold hover:opacity-70 text-blue" target="_blank" href="privacy">privacy policy</a>. You may remove your consent and participation in the research at any time by emailing <a className="text-blue font-bold hover:opacity-70" href="mailto:research@techequitycollaborative.org">research@techequitycollaborative.org</a>. If you choose to do so, TechEquity will delete your data within 21 days of receiving your request.</p>
       <p className="my-2">Please select one of the following:</p>
       <div className="flex ml-8">
         <input onChange={handleIndividualClick} type="checkbox" id="individual" name="individual" className="hover:cursor-pointer w-4" checked={privacyOption === "individual" ? true : false} />
@@ -111,7 +118,13 @@ function Start(props: FormProps) {
           {privacyOption === "organization" ? <FormField {...orgFieldProps} /> : null}
         </div>
       </div>
-      <p className="mt-4">Email address is optional and will only be used to find and delete your info should you request it. For more on our privacy policy <a className="font-bold hover:opacity-70 text-blue" target="_blank" href="privacy">click here</a>.</p>
+      <p className="my-4">Email address is optional and will only be used to find and delete your info should you request it. For more on our privacy policy <a className="font-bold hover:opacity-70 text-blue" target="_blank" href="privacy">click here</a>.</p>
+      <h3 className="font-bold my-4 text-xl">Consent to Share</h3>
+      <p>Please check this optional box if you would like to grant TechEquity consent to discuss your application details with a lawyer. Note that no personally identifying information is collected or shared via this form.</p>
+      <div className="flex ml-8">
+        <input onChange={handleConsentClick} type="checkbox" id="shareConsent" name="shareConsent" className="hover:cursor-pointer w-4" checked={shareConsent === "yes" ? true : false} />
+        <p className="m-2 mt-[9px]">I give consent for TechEquity to share my information with attorneys should they determine that I may have experienced discrimination or other illegal treatment</p>
+      </div>
     </>
   );
 }

@@ -11,9 +11,9 @@ export const Race = [
 export type Race = (typeof Race)[number];
 
 export const Ethnicity = [
-  "Ethnicity 1",
-  "Ethnicity 2",
-  "Ethnicity 3",
+  "Hispanic/Latino",
+  "Not Hispanic/Latino",
+  "No Response",
 ] as const;
 export type Ethnicity = (typeof Ethnicity)[number];
 
@@ -36,7 +36,13 @@ export type PortableScreeningFee = (typeof PortableScreeningFee)[number];
 export const ApplicationMethod = ["In Person", "Online"] as const;
 export type ApplicationMethod = (typeof ApplicationMethod)[number];
 
-export const AssessmentOutcome = ["Accepted", "Denied"] as const;
+export const HousingVoucher = ["Yes", "No", "Not Sure"] as const;
+export type HousingVoucher = (typeof HousingVoucher)[number];
+
+export const IncomeCertification = ["The property has income certification requirements", "The property does not have income certification requirements", "Not Sure"] as const;
+export type IncomeCertification = (typeof IncomeCertification)[number];
+
+export const AssessmentOutcome = ["Accepted", "Accepted with conditions (such as increased deposit or \"risk fee\")", "Denied"] as const;
 export type AssessmentOutcome = (typeof AssessmentOutcome)[number];
 
 export const DenialReason = [
