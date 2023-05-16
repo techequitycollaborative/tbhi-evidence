@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>TBHI Housing Outcome Submission Form</title>
         <meta
           name="description"
           content="A tool for securely submitting housing application information"
