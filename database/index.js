@@ -40,17 +40,17 @@ p.connect((err, client, release) => {
   });
 });
 
-app.get("/people", (req, res, next) => {
-  p.query("select * from form.person").then((data) => {
-    res.send(data.rows);
-  });
-});
+// app.get("/people", (req, res, next) => {
+//   p.query("select * from form.person").then((data) => {
+//     res.send(data.rows);
+//   });
+// });
 
-app.get("/application", (req, res, next) => {
-  p.query("select * from form.application").then((data) => {
-    res.send(data.rows);
-  });
-});
+// app.get("/application", (req, res, next) => {
+//   p.query("select * from form.application").then((data) => {
+//     res.send(data.rows);
+//   });
+// });
 
 // Parameterized queries are safe from SQL injection in PostgreSQL for Node.js:
 // https://node-postgres.com/features/queries#parameterized-query
