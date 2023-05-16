@@ -21,7 +21,7 @@ create table if not exists form.person (
 create table if not exists form.application (
 	application_id serial primary key,
 	person_id int,
-	application_date date,
+	form_submission_date timestamptz,
 	street varchar(50),
 	unit varchar(50),
 	city varchar(50),
@@ -30,6 +30,7 @@ create table if not exists form.application (
 	rent int,
 	property_manager varchar(50),
 	screening_company varchar(50),
+	application_date date,
 	fee int,
 	fee_type varchar(3),
 	application_method varchar(50),
