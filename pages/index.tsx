@@ -98,6 +98,11 @@ const Form: NextPage = () => {
     }
   }
 
+  function handleStartOver() {
+    setStep(0);
+    setFormData({});
+  }
+
   function handleNext() {
     if (step < FormPage.ThankYou) {
       const errors = validate(formData);
@@ -216,7 +221,7 @@ const Form: NextPage = () => {
     <div>
       <Header logo={step > 0 && step <= 3 ? false : true} />
       <div className="w-1/2 min-w-[600px] mx-auto mt-16 pb-20">
-        {step > 0 && step <= 3 ? <Nav currentPage={step} lastPage={3} back={handleBack} /> : null}
+        {step > 0 && step <= 3 ? <Nav currentPage={step} lastPage={3} back={handleBack} startover={handleStartOver} /> : null}
         <div className="mt-8">{formContent(step)}</div>
         <div className="mb-8">{nextButton(step)}</div>
         {DEBUG === "true" ? (

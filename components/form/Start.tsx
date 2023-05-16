@@ -13,11 +13,11 @@ import { Organization } from "@/types/formoptions";
 export function validateStart(formData: FormData) {
   const errors: any = {};
 
-  if (!formData.userType) {
+  if (!formData?.userType) {
     errors.userType = "You must read and agree to the privacy policy to use this form"
   }
 
-  if (formData.userType === 'organization') {
+  if (formData?.userType === 'organization') {
     if (!formData.organization) {
       errors.organization = "Organization is required if filling out on behalf of an applicant";
     } else if (!Organization.includes(formData.organization)) {
