@@ -6,6 +6,7 @@ import ApplicantDetails, { validateApplicant } from "@/components/form/Applicant
 import ApplicationDetails, { validateApplication } from "@/components/form/ApplicationDetails";
 import PropertyDetails, { validateProperty } from "@/components/form/PropertyDetails";
 import Start, { validateStart } from "@/components/form/Start";
+import { testFetchApplications, testFetchPeople, testSubmit } from "@/dev/testDBFunctions";
 import { CriminalHistoryEntry, Eviction, FormData } from "@/types/formdata";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -15,9 +16,9 @@ const DEBUG = process.env.NEXT_PUBLIC_DEBUG ? process.env.NEXT_PUBLIC_DEBUG : "t
 const API_URL = process.env.NEXT_PUBLIC_API_URL
   ? process.env.NEXT_PUBLIC_API_URL
   : "http://localhost:8000/";
-const SAVE_RECORD_URL = API_URL + "saveRecord";
-const ALL_PEOPLE_URL = API_URL + "people";
-const ALL_APPLICATIONS_URL = API_URL + "application";
+export const SAVE_RECORD_URL = API_URL + "saveRecord";
+export const ALL_APPLICATIONS_URL = API_URL + "application";
+export const ALL_PEOPLE_URL = API_URL + "people";
 
 enum FormPage {
   Start,
@@ -224,7 +225,10 @@ const Form: NextPage = () => {
               <button onClick={testSubmit}>TEST SUBMIT</button>
             </div>
             <div>
-              <button onClick={testFetch}>TEST FETCH</button>
+              <button onClick={testFetchApplications}>TEST FETCH APPLICATIONS</button>
+            </div>
+            <div>
+              <button onClick={testFetchPeople}>TEST FETCH PEOPLE</button>
             </div>
             <div style={{ whiteSpace: "pre-wrap" }}>
               {`current form data:
@@ -241,88 +245,5 @@ const Form: NextPage = () => {
     </div>
   );
 };
-
-// ONLY FOR TESTING. DELETE AFTER GOING LIVE OR FIND SOMEWHERE ELSE TO PUT IT.
-function testSubmit() {
-  try {
-    const r = fetch(SAVE_RECORD_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        email: "conrad@madeup.biz",
-        userType: "individual",
-        organization: "Organization 1",
-        applicationDate: new Date("2021-01-01"),
-        race: "Black or African American",
-        age: 50,
-        yearlyIncome: 100000,
-        creditScore: 700,
-        evictionHistory: [
-          {
-            evictionDate: new Date("2021-01-01"),
-            evictionReason: "Reason 1",
-          },
-          {
-            evictionDate: new Date("2021-02-01"),
-            evictionReason: "Reason 2",
-          },
-        ],
-        criminalHistory: [
-          {
-            convictionDate: new Date("2021-01-01"),
-            criminalHistoryType: "Felony",
-            offenseName: "robbery",
-          },
-          {
-            convictionDate: new Date("2021-03-01"),
-            criminalHistoryType: "Felony",
-            offenseName: "burglary",
-          },
-        ],
-        street: "joey way",
-        unit: "2C",
-        city: "Seattle",
-        zipcode: 84510,
-        monthlyRent: 1000,
-        landlordName: "joey",
-        screeningCompanyName: "joey's screening",
-        screeningFee: 100,
-        portableScreeningFee: "Yes",
-        applicationMethod: "Online",
-        assessmentOutcome: "Denied",
-        assessmentOutcomeDetails: "didn't like me",
-        denialReason: "Other",
-        otherDenialReason: "didn't like me",
-        alternateDenialNotes: "didn't like me",
-        additionalContextNotes: "joey is not cool",
-      } as FormData),
-    });
-    r.then(async (response) => {
-      if (response.ok) {
-        window.alert("success");
-      } else {
-        window.alert(await response.text());
-      }
-    });
-  } catch (err: any) {
-    console.log(err.message);
-  }
-}
-function testFetch() {
-  const r = fetch(ALL_APPLICATIONS_URL, {
-    method: "GET",
-  });
-  r.then(async (response) => {
-    if (response.ok) {
-      console.log("fetch succeeded");
-      console.log(JSON.stringify(await response.json(), null, 2));
-    } else {
-      window.alert("fetch failed");
-    }
-  });
-}
 
 export default Form;

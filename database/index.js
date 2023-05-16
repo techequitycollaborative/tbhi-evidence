@@ -52,6 +52,8 @@ app.get("/application", (req, res, next) => {
   });
 });
 
+// Parameterized queries are safe from SQL injection in PostgreSQL for Node.js:
+// https://node-postgres.com/features/queries#parameterized-query
 app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
   const data = req.body;
   const uuid = crypto.randomUUID();
@@ -64,16 +66,25 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
       `INSERT INTO form.person (organization, email, user_type, race, ethnicity, age, income, credit_score, rental_debt)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING person_id`,
-      [data.organization, data.email, data.userType, data.race, data.ethnicity, data.age, data.yearlyIncome, data.creditScore, data.rentalDebt]
+      [
+        data.organization,
+        data.email,
+        data.userType,
+        data.race,
+        data.ethnicity,
+        data.age,
+        data.yearlyIncome,
+        data.creditScore,
+        data.rentalDebt,
+      ]
     );
     const personId = result.rows[0]["person_id"];
     await client.query(
       `INSERT INTO form.application
-      (person_id, application_date, street, unit, city, state, zipcode, rent, property_manager, screening_company, fee, fee_type, application_method, assessment_outcome, assessment_details, denial_reason, denial_details, alternate_denial_notes, additional_details)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`,
+      (person_id, form_submission_date, street, unit, city, state, zipcode, rent, property_manager, screening_company, application_date, fee, fee_type, application_method, assessment_outcome, assessment_details, denial_reason, denial_details, alternate_denial_notes, additional_details)
+      VALUES ($1, CURRENT_TIMESTAMP, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`,
       [
         personId,
-        data.applicationDate,
         data.street,
         data.unit,
         data.city,
@@ -82,6 +93,7 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
         data.monthlyRent,
         data.propertyManagementCompany,
         data.screeningCompanyName,
+        data.applicationDate,
         data.screeningFee,
         data.portableScreeningFee,
         data.applicationMethod,
