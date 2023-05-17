@@ -37,17 +37,7 @@ export function validateApplicant(formData: FormData) {
     errors.yearlyIncome = "Yearly income must be a non-negative number.";
   }
 
-  if (!formData.creditScore) {
-    errors.creditScore = "Credit score is required";
-  } else if (
-    isNaN(formData.creditScore) ||
-    formData.creditScore < 350 ||
-    formData.creditScore > 850
-  ) {
-    errors.creditScore = "Credit score must be a number between 350 and 850";
-  }
-
-  if (formData.rentalDebt && (isNaN(formData.rentalDebt) || formData.rentalDebt < 0)) {
+  if (formData.rentalDebt && (!parseInt(formData.rentalDebt) || parseInt(formData.rentalDebt) < 0)) {
     errors.rentalDebt = "Rental debt must be a positive number";
   }
 
@@ -98,11 +88,12 @@ const ApplicantDetails = (props: FormProps) => {
   return (
     <div>
       <h2>Applicant Details</h2>
+      <p className="text-center text-navy italic">* = required field</p>
       <div className="flex gap-4 w-full">
         <FormField
           {...props}
           labelId="race"
-          labelText="Race"
+          labelText="Race*"
           formDataKey="race"
           placeholder="select one"
           type="select"
@@ -111,7 +102,7 @@ const ApplicantDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="ethnicity"
-          labelText="Ethnicity"
+          labelText="Ethnicity*"
           formDataKey="ethnicity"
           placeholder="select one"
           type="select"
@@ -122,7 +113,7 @@ const ApplicantDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="age"
-          labelText="Age"
+          labelText="Age*"
           formDataKey="age"
           placeholder="applicant's age"
           type="number"
@@ -130,9 +121,9 @@ const ApplicantDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="yearlyIncome"
-          labelText="Yearly Income"
+          labelText="Yearly Income*"
           formDataKey="yearlyIncome"
-          placeholder="most recent yearly income"
+          placeholder="approximate yearly income"
           type="number"
         />
       </div>
@@ -142,16 +133,16 @@ const ApplicantDetails = (props: FormProps) => {
           labelId="creditScore"
           labelText="Credit Score"
           formDataKey="creditScore"
-          placeholder="enter a number between 300 - 850"
-          type="number"
+          placeholder="applicant's credit score"
+          type="text"
         />
         <FormField
           {...props}
           labelId="rentalDebt"
           labelText="Rental Debt"
           formDataKey="rentalDebt"
-          placeholder="enter if applicable"
-          type="number"
+          placeholder="estimated amount, if applicable"
+          type="text"
         />
       </div>
       <p className="fake-label mt-2">Eviction History</p>

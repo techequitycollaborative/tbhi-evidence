@@ -11,29 +11,33 @@ import {
 
 // TODO: use this type in final validation step so that a type error occurs if a field is missing
 export interface SubmittableFormData {
-  email: string;
+  email?: string;
   userType: string;
+  shareConsent?: string;
   organization?: Organization;
   race: Race;
   ethnicity: Ethnicity;
-  age?: number;
-  yearlyIncome?: number;
-  creditScore?: number;
-  rentalDebt?: number;
+  age: number;
+  yearlyIncome: number;
+  creditScore?: string;
+  rentalDebt?: string;
   evictionHistory?: Array<Eviction>;
   criminalHistory?: Array<CriminalHistoryEntry>;
-  street: string;
-  unit: string;
+  street?: string;
+  unit?: string;
   city: string;
   state: string;
-  zipcode: number;
-  monthlyRent?: number;
-  propertyManagementCompany: string;
-  screeningCompanyName: string;
+  zipcode: string;
+  monthlyRent: number;
+  propertyManagementCompany?: string;
+  screeningCompanyName?: string;
   screeningFee?: number;
   portableScreeningFee?: string;
   applicationMethod?: ApplicationMethod;
-  assessmentOutcome?: AssessmentOutcome;
+  portalName?: string;
+  housingVoucher?: string;
+  incomeCertification?: string;
+  assessmentOutcome: AssessmentOutcome;
   assessmentOutcomeDetails?: string;
   denialReason?: DenialReason;
   applicationDate?: Date;

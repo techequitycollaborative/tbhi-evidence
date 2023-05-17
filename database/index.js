@@ -40,17 +40,17 @@ p.connect((err, client, release) => {
   });
 });
 
-app.get("/people", (req, res, next) => {
-  p.query("select * from form.person").then((data) => {
-    res.send(data.rows);
-  });
-});
+// app.get("/people", (req, res, next) => {
+//   p.query("select * from form.person").then((data) => {
+//     res.send(data.rows);
+//   });
+// });
 
-app.get("/application", (req, res, next) => {
-  p.query("select * from form.application").then((data) => {
-    res.send(data.rows);
-  });
-});
+// app.get("/application", (req, res, next) => {
+//   p.query("select * from form.application").then((data) => {
+//     res.send(data.rows);
+//   });
+// });
 
 // Parameterized queries are safe from SQL injection in PostgreSQL for Node.js:
 // https://node-postgres.com/features/queries#parameterized-query
@@ -63,13 +63,14 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
   try {
     await client.query("BEGIN");
     const result = await client.query(
-      `INSERT INTO form.person (organization, email, user_type, race, ethnicity, age, income, credit_score, rental_debt)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `INSERT INTO form.person (organization, email, user_type, share_consent, race, ethnicity, age, income, credit_score, rental_debt)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING person_id`,
       [
         data.organization,
         data.email,
         data.userType,
+        data.shareConsent,
         data.race,
         data.ethnicity,
         data.age,
@@ -81,8 +82,8 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
     const personId = result.rows[0]["person_id"];
     await client.query(
       `INSERT INTO form.application
-      (person_id, form_submission_date, street, unit, city, state, zipcode, rent, property_manager, screening_company, application_date, fee, fee_type, application_method, assessment_outcome, assessment_details, denial_reason, denial_details, alternate_denial_notes, additional_details)
-      VALUES ($1, CURRENT_TIMESTAMP, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`,
+      (person_id, form_submission_date, street, unit, city, state, zipcode, rent, property_manager, screening_company, application_date, fee, fee_type, application_method, portal_name, housing_voucher, income_certification, assessment_outcome, assessment_details, denial_reason, denial_details, alternate_denial_notes, additional_details)
+      VALUES ($1, CURRENT_TIMESTAMP, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)`,
       [
         personId,
         data.street,
@@ -97,6 +98,9 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
         data.screeningFee,
         data.portableScreeningFee,
         data.applicationMethod,
+        data.portalName,
+        data.housingVoucher,
+        data.incomeCertification,
         data.assessmentOutcome,
         data.assessmentOutcomeDetails,
         data.denialReason,
@@ -141,5 +145,5 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
 });
 
 app.listen(server_port, () => {
-  console.log(`Database server is running on port ${db_port}.`);
+  console.log(`Database server is running on port ${server_port}.`);
 });

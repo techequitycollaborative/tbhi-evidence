@@ -16,11 +16,11 @@ export function testSubmit() {
         userType: "individual",
         organization: "Organization 1",
         race: "Black or African American",
-        ethnicity: "Ethnicity 1",
+        ethnicity: "No Response",
         age: 50,
         yearlyIncome: 100000,
-        creditScore: 700,
-        rentalDebt: 1000,
+        creditScore: "700",
+        rentalDebt: "1000",
         evictionHistory: [
           {
             evictionDate: new Date("2021-01-01"),
@@ -47,7 +47,7 @@ export function testSubmit() {
         unit: "2C",
         city: "Seattle",
         state: "WA",
-        zipcode: 84510,
+        zipcode: "84510",
         monthlyRent: 1000,
         landlordName: "joey",
         screeningCompanyName: "joey's screening",

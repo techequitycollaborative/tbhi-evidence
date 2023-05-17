@@ -10,13 +10,6 @@ import { useForm } from "react-hook-form";
 export function validateProperty(formData: any): { [key: string]: string } {
   const errors = {} as any;
 
-  // any other address validation?
-  if (!formData.street) {
-    errors.street = "Street is required";
-  }
-  if (!formData.unit) {
-    errors.unit = "Unit is required";
-  }
   if (!formData.city) {
     errors.city = "City is required";
   }
@@ -47,12 +40,14 @@ const PropertyDetails = (props: FormProps) => {
   return (
     <div>
       <h2>Property Details</h2>
+      <p className="text-center text-navy italic">* = required field</p>
       <div className="flex gap-4 w-full">
         <FormField
           {...props}
           labelId="propertyStreet"
           labelText="Street"
           formDataKey="street"
+          placeholder="street address of the property"
           type="text"
         />
         <FormField
@@ -60,6 +55,7 @@ const PropertyDetails = (props: FormProps) => {
           labelId="propertyUnit"
           labelText="Unit"
           formDataKey="unit"
+          placeholder="unit, if applicable"
           type="text"
         />
       </div>
@@ -67,15 +63,17 @@ const PropertyDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="propertyCity"
-          labelText="City"
+          labelText="City*"
           formDataKey="city"
+          placeholder="city where the property is located"
           type="text"
         />
         <FormField
           {...props}
           labelId="propertyState"
-          labelText="State"
+          labelText="State*"
           formDataKey="state"
+          placeholder="state where the property is located"
           type="text"
         />
       </div>
@@ -83,17 +81,19 @@ const PropertyDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="propertyZipcode"
-          labelText="Zipcode"
+          labelText="Zipcode*"
           formDataKey="zipcode"
-          type="number"
+          placeholder="5-digit zipcode"
+          type="text"
         />
       </div>
       <div className="flex gap-4 w-full">
         <FormField
           {...props}
           labelId="propertyMonthlyRent"
-          labelText="Monthly Rent"
+          labelText="Monthly Rent*"
           formDataKey="monthlyRent"
+          placeholder="monthly rent of the unit"
           type="number"
         />
         <FormField
@@ -101,6 +101,7 @@ const PropertyDetails = (props: FormProps) => {
           labelId="propertyManagementCompany"
           labelText="Property Management Company"
           formDataKey="propertyManagementCompany"
+          placeholder="company or landlord that manages property"
           type="text"
         />
       </div>

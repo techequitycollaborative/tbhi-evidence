@@ -156,7 +156,7 @@ const Form: NextPage = () => {
   }
 
   function handleSubmit() {
-    const errors = validateAll(formData);
+    const errors = validateAll(formData ? formData : {});
     if (Object.keys(errors).length === 0) {
       setErrors(null);
       try {
