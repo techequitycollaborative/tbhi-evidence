@@ -21,28 +21,8 @@ export function testSubmit() {
         yearlyIncome: 100000,
         creditScore: "700",
         rentalDebt: "1000",
-        evictionHistory: [
-          {
-            evictionDate: new Date("2021-01-01"),
-            evictionReason: "Reason 1",
-          },
-          {
-            evictionDate: new Date("2021-02-01"),
-            evictionReason: "Reason 2",
-          },
-        ],
-        criminalHistory: [
-          {
-            convictionDate: new Date("2021-05-01"),
-            criminalHistoryType: "Felony",
-            offenseName: "robbery",
-          },
-          {
-            convictionDate: new Date("2021-03-01"),
-            criminalHistoryType: "Felony",
-            offenseName: "burglary",
-          },
-        ],
+        evictionHistory: [{question: "hello", answer: true}],
+        criminalHistory: [{question: "world", answer: false}],
         street: "joey way",
         unit: "2C",
         city: "Seattle",

@@ -8,7 +8,7 @@ import PropertyDetails, { validateProperty } from "@/components/form/PropertyDet
 import Start, { validateStart } from "@/components/form/Start";
 import ThankYou from "@/components/form/ThankYou";
 import { testFetchApplications, testFetchPeople, testSubmit } from "@/dev/testDBFunctions";
-import { CriminalHistoryEntry, Eviction, FormData } from "@/types/formdata";
+import { FormData } from "@/types/formdata";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -44,16 +44,6 @@ const Form: NextPage = () => {
       // convert date strings back to date objects
       // TODO: improvement would be to store dates only as strings in the formData to avoid serialization woes
       const preservedFormData = JSON.parse(sessionFormData) as FormData;
-      preservedFormData.evictionHistory?.forEach((element: Eviction) => {
-        if (element.evictionDate) {
-          element.evictionDate = new Date(element.evictionDate);
-        }
-      });
-      preservedFormData.criminalHistory?.forEach((element: CriminalHistoryEntry) => {
-        if (element.convictionDate) {
-          element.convictionDate = new Date(element.convictionDate);
-        }
-      });
       setFormData(preservedFormData);
     }
   }, []);

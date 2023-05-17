@@ -109,29 +109,28 @@ app.post("/saveRecord", bodyParser.json(), async (req, res, next) => {
         data.additionalContextNotes,
       ]
     );
-    await Promise.all(
-      data.evictionHistory?.map(async (eviction) => {
-        await client.query(
-          `INSERT INTO form.eviction (person_id, eviction_date, reason)
-          VALUES ($1, $2, $3)`,
-          [personId, eviction.evictionDate, eviction.evictionReason]
-        );
-      })
-    );
-    await Promise.all(
-      data.criminalHistory?.map(async (conviction) => {
-        await client.query(
-          `INSERT INTO form.criminal_history (person_id, type, conviction_date, offense)
-          VALUES ($1, $2, $3, $4)`,
-          [
-            personId,
-            conviction.criminalHistoryType,
-            conviction.convictionDate,
-            conviction.offenseName,
-          ]
-        );
-      })
-    );
+    if (data.evictionHistory) {
+      await Promise.all(
+        data.evictionHistory?.map(async (question) => {
+          await client.query(
+            `INSERT INTO form.eviction_history (person_id, question, answer)
+            VALUES ($1, $2, $3)`,
+            [personId, question.question, question.answer]
+          );
+        })
+      );
+    }
+    if (data.criminalHistory) {
+      await Promise.all(
+        data.criminalHistory?.map(async (question) => {
+          await client.query(
+            `INSERT INTO form.criminal_history (person_id, question, answer)
+            VALUES ($1, $2, $3)`,
+            [personId, question.question, question.answer]
+          );
+        })
+      );
+    }
     await client.query("COMMIT");
     console.log(`data insertion (ID ${uuid}) successful`);
     res.status(200).send();
