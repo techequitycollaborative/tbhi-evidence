@@ -124,8 +124,8 @@ function Start(props: FormProps) {
       </div>
       <p className="my-4">Email address is optional and will only be used to find and delete your info should you request it. For more on our privacy policy <a className="font-bold hover:opacity-70 text-blue" target="_blank" href="privacy">click here</a>.</p>
       <h3 className="font-bold my-4 text-xl">Consent to Share</h3>
-      <p>Please check this optional box if you would like to grant TechEquity consent to discuss your application details with a lawyer. Note that no personally identifying information is collected or shared via this form.</p>
-      <div className="flex ml-8">
+      <p className="mb-4">Please check this optional box if you would like to grant TechEquity consent to discuss your application details with a lawyer. Note that no personally identifying information is collected or shared via this form.</p>
+      <div className="flex ml-8 mb-2">
         <div className="w-4">
           <input onChange={handleConsentClick} type="checkbox" id="shareConsent" name="shareConsent" className="hover:cursor-pointer w-4" checked={shareConsent === "yes" ? true : false} />
         </div>
