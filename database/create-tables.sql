@@ -33,7 +33,7 @@ create table if not exists form.application (
 	screening_company text,
 	application_date date,
 	fee int,
-	fee_type varchar(3),
+	fee_type text,
 	application_method text,
 	portal_name text,
 	housing_voucher text,
