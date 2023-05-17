@@ -1,7 +1,7 @@
 import FormField from "@/components/FormField";
 import { FormProps } from "@/pages";
 import { FormData } from "@/types/formdata";
-import { CriminalHistoryType, Ethnicity, EvictionReason, Race } from "@/types/formoptions";
+import { CriminalHistory, Ethnicity, EvictionHistory, Race, TimeframeOptions } from "@/types/formoptions";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -40,36 +40,7 @@ export function validateApplicant(formData: FormData) {
   if (formData.rentalDebt && (!parseInt(formData.rentalDebt) || parseInt(formData.rentalDebt) < 0)) {
     errors.rentalDebt = "Rental debt must be a positive number";
   }
-
-  formData.evictionHistory?.forEach((entry) => {
-    if (!entry.evictionReason || !entry.evictionDate) {
-      errors.evictionHistory = "Must provide eviction reason(s) with date(s).";
-    } else if (!EvictionReason.includes(entry.evictionReason)) {
-      errors.evictionHistory = "Eviction history reason(s) must be from provided list";
-    } else if (entry.evictionDate.toString() === "Invalid Date") {
-      errors.evictionHistory = "Eviction date(s) must be in correct format (MM-DD-YYYY).";
-    } else if (
-      new Date(entry.evictionDate).setUTCHours(0, 0, 0, 0) >= new Date().setUTCHours(0, 0, 0, 0)
-    ) {
-      errors.evictionHistory = "Eviction date(s) must be in the past.";
-    }
-  });
-
-  formData.criminalHistory?.forEach((entry) => {
-    if (!entry.criminalHistoryType || !entry.convictionDate || !entry.offenseName) {
-      errors.criminalHistory =
-        "Must provide criminal history type(s) with date(s) and offense name(s).";
-    } else if (!CriminalHistoryType.includes(entry.criminalHistoryType)) {
-      errors.criminalHistory = "Criminal history type(s) must be from provided list";
-    } else if (entry.convictionDate.toString() === "Invalid Date") {
-      errors.criminalHistory = "Criminal offense date(s) must be in correct format (MM-DD-YYYY).";
-    } else if (
-      new Date(entry.convictionDate).setUTCHours(0, 0, 0, 0) >= new Date().setUTCHours(0, 0, 0, 0)
-    ) {
-      errors.criminalHistory = "Criminal offense date(s) must be in the past.";
-    }
-  });
-
+  
   return errors;
 }
 
@@ -145,91 +116,46 @@ const ApplicantDetails = (props: FormProps) => {
           type="text"
         />
       </div>
-      <p className="fake-label mt-2">Eviction History</p>
-      {Array.from({ length: evictionHistoryRows }).map((_, index) => (
-        <div key={index} className="flex gap-4 mb-1">
-          <FormField
-            {...props}
-            labelId="evictionReason"
-            formDataKey="evictionHistory"
-            type="select"
-            placeholder="select one"
-            options={EvictionReason as readonly string[]}
-            arrayInfo={{
-              index,
-              keyAtIndex: "evictionReason",
-            }}
-          />
-          <FormField
-            {...props}
-            labelId="evictionDate"
-            formDataKey="evictionHistory"
-            type="date"
-            placeholder="date of eviction"
-            arrayInfo={{
-              index,
-              keyAtIndex: "evictionDate",
-            }}
-          />
-        </div>
-      ))}
-      {props.errors?.evictionHistory && (
-        <p className="error-text">{props.errors?.evictionHistory}</p>
-      )}
-      <button
-        className="add-history-btn"
-        onClick={() => setEvictionHistoryRows((rows) => rows + 1)}
-      >
-        + Add another eviction
-      </button>
-      <p className="fake-label mt-2">Criminal History</p>
-      {Array.from({ length: criminalHistoryRows }).map((_, index) => (
-        <div key={index} className="flex gap-4 mb-1">
-          <FormField
-            {...props}
-            labelId="criminalHistoryType"
-            formDataKey="criminalHistory"
-            type="select"
-            placeholder="select one"
-            options={CriminalHistoryType as readonly string[]}
-            arrayInfo={{
-              index,
-              keyAtIndex: "criminalHistoryType",
-            }}
-          />
-          <FormField
-            {...props}
-            labelId="convictionDate"
-            formDataKey="criminalHistory"
-            type="date"
-            placeholder="date of conviction"
-            arrayInfo={{
-              index,
-              keyAtIndex: "convictionDate",
-            }}
-          />
-          <FormField
-            {...props}
-            labelId="offenseName"
-            formDataKey="criminalHistory"
-            type="text"
-            placeholder="name of offense"
-            arrayInfo={{
-              index,
-              keyAtIndex: "offenseName",
-            }}
-          />
-        </div>
-      ))}
-      {props.errors?.criminalHistory && (
-        <p className="error-text">{props.errors?.criminalHistory}</p>
-      )}
-      <button
-        className="add-history-btn"
-        onClick={() => setCriminalHistoryRows((rows) => rows + 1)}
-      >
-        + Add more criminal history
-      </button>
+      <div className="flex gap-4 mt-6 w-full">
+        <FormField
+          {...props}
+          labelId="evictionHistory"
+          labelText="Eviction History (check all that apply)"
+          formDataKey="evictionHistory"
+          type="multiselect"
+          prompt="Have you ever:"
+          options={EvictionHistory}
+        />
+        <FormField
+          {...props}
+          labelId="criminalHistory"
+          labelText="Criminal History (check all that apply)"
+          formDataKey="criminalHistory"
+          type="multiselect"
+          prompt="Have you ever:"
+          options={CriminalHistory}
+        />
+      </div>
+      <div className="flex gap-4 w-full">
+        <FormField
+          {...props}
+          labelId="evictionHistoryTimeframe"
+          labelText="Most Recent Eviction History"
+          formDataKey="evictionHistoryTimeframe"
+          placeholder="select one"
+          type="select"
+          options={TimeframeOptions}
+        />
+        <FormField
+          {...props}
+          labelId="criminalHistoryTimeframe"
+          labelText="Most Recent Criminal History"
+          formDataKey="criminalHistoryTimeframe"
+          placeholder="select one"
+          type="select"
+          options={TimeframeOptions}
+        />
+      </div>
     </div>
   );
 };

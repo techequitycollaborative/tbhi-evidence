@@ -1,7 +1,7 @@
 -- UNCOMMENT ONLY FOR DEBUGGING BEFORE SITE GOES LIVE
 -- DELETE BEFORE SITE GOES LIVE TO PREVENT RISK OF DATA LOSS
 -- drop table if exists form.application;
--- drop table if exists form.eviction;
+-- drop table if exists form.eviction_history;
 -- drop table if exists form.criminal_history;
 -- drop table if exists form.person;
 
@@ -47,19 +47,18 @@ create table if not exists form.application (
 	constraint application_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );
 
-create table if not exists form.eviction (
-	eviction_id serial primary key,
+create table if not exists form.eviction_history (
+	eviction_history_id serial primary key,
 	person_id int,
-	eviction_date date,
-	reason text,
-	constraint eviction_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
+	question text,
+	answer boolean,
+	constraint eviction_history_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );
 
 create table if not exists form.criminal_history (
 	criminal_history_id serial primary key,
 	person_id int,
-	"type" text,
-	conviction_date date,
-	offense text,
+	question text,
+	answer boolean,
 	constraint criminal_history_fk_person_id foreign key (person_id) references form.person(person_id) on delete cascade
 );

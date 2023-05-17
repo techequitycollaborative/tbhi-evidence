@@ -24,11 +24,31 @@ export const Organization = [
 ] as const;
 export type Organization = (typeof Organization)[number];
 
-export const EvictionReason = ["Reason 1", "Reason 2", "Reason 3"] as const;
-export type EvictionReason = (typeof EvictionReason)[number];
+export const EvictionHistory = [
+  "Been served with an eviction notice", 
+  "Been served with a nonpayment notice", 
+  "Contested an eviction",
+  "Been sued in an eviction case",
+  "Had an eviction case that was dismissed"
+] as const;
+export type EvictionHistory = (typeof EvictionHistory)[number];
 
-export const CriminalHistoryType = ["Mideameanor", "Felony"] as const;
-export type CriminalHistoryType = (typeof CriminalHistoryType)[number];
+export const CriminalHistory = [
+  "Been arrested",
+  "Been charged with a misdemeanor",
+  "Been charged with a felony",
+  "Been convicted of a misdemeanor",
+  "Been convicted of a felony",
+  "Had conviction(s) that were expunged",
+] as const;
+export type CriminalHistory = (typeof CriminalHistory)[number];
+
+export const TimeframeOptions = [
+  "One of these has happened in the last 5 years",
+  "One of these has happened in the last 10 years",
+  "Not Sure",
+] as const;
+export type TimeframeOptions = (typeof TimeframeOptions)[number];
 
 export const PortableScreeningFee = ["Yes", "No", "Not Sure"];
 export type PortableScreeningFee = (typeof PortableScreeningFee)[number];

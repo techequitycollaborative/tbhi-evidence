@@ -5,14 +5,14 @@ export type FormFieldProps = FormInputProps & {
 };
 
 export default function FormField(props: FormFieldProps) {
-  const { labelId, labelText, formDataKey, arrayInfo, errors } = props;
+  const { labelId, labelText, formDataKey, errors } = props;
 
   return (
     <div className="flex-1">
-      <div className={!labelText || arrayInfo ? "" : "mt-2"}>
+      <div className={!labelText ? "" : "mt-2"}>
         <label
-          htmlFor={labelId + (arrayInfo?.index ?? "")}
-          className={!labelText || arrayInfo ? "sr-only" : ""}
+          htmlFor={labelId}
+          className={!labelText ? "sr-only" : ""}
         >
           {labelText}
         </label>
@@ -20,7 +20,7 @@ export default function FormField(props: FormFieldProps) {
       <div>
         <Input {...props} />
         <div>
-          {errors?.[formDataKey] && !arrayInfo && (
+          {errors?.[formDataKey] && (
             <p className="error-text">{errors[formDataKey]}</p>
           )}
         </div>

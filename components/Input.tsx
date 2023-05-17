@@ -1,15 +1,11 @@
 import { FormProps } from "@/pages";
-import { CriminalHistoryEntry, Eviction, FormData } from "@/types/formdata";
+import { Question, FormData } from "@/types/formdata";
 import { useState } from "react";
 
 interface BaseProps extends FormProps {
   labelId: string;
   formDataKey: keyof FormData;
   placeholder?: string;
-  arrayInfo?: {
-    index: number;
-    keyAtIndex: keyof Eviction | keyof CriminalHistoryEntry;
-  };
 }
 interface SelectProps extends BaseProps {
   type: "select";
@@ -18,17 +14,17 @@ interface SelectProps extends BaseProps {
 interface InputProps extends BaseProps {
   type: "text" | "number" | "email" | "date" | "textarea";
 }
-export type FormInputProps = InputProps | SelectProps;
+interface MultiSelectProps extends BaseProps {
+  type: "multiselect";
+  prompt: string;
+  options: readonly string[];
+}
+export type FormInputProps = InputProps | SelectProps | MultiSelectProps;
 
 export default function Input(props: FormInputProps) {
-  const { formData, setFormData, labelId, formDataKey, placeholder, arrayInfo } = props;
+  const { formData, setFormData, labelId, formDataKey, placeholder } = props;
 
-  let value: any;
-  if (arrayInfo) {
-    value = (formData[formDataKey] as Array<any>)?.[arrayInfo.index]?.[arrayInfo.keyAtIndex];
-  } else {
-    value = formData[formDataKey] as string | number | undefined;
-  }
+  let value: any = formData[formDataKey] as string | number | undefined;
 
   const [type, setType] = useState(
     props.type === "select" ? "select" : props.type === "date" && !!value ? "date" : "text"
@@ -44,22 +40,18 @@ export default function Input(props: FormInputProps) {
     if (type === "date") {
       newValue = new Date(newValue);
     }
+    setFormData({
+      ...formData,
+      [formDataKey]: newValue,
+    });
+  };
 
-    if (arrayInfo) {
-      const history = updateHistoryArray(
-        formData[formDataKey] as Array<any> | undefined,
-        arrayInfo.index,
-        {
-          [arrayInfo.keyAtIndex]: newValue,
-        }
-      );
-      setFormData({ ...formData, [formDataKey]: history });
-    } else {
-      setFormData({
-        ...formData,
-        [formDataKey]: newValue,
-      });
-    }
+  const onCheck = (
+    e: any
+  ) => {
+    let answer: any = {question: e.target.name, answer: e.target.checked};
+    const history = updateHistoryArray(formData[formDataKey] as Array<any> | undefined, answer);
+    setFormData({ ...formData, [formDataKey]: history });
   };
 
   switch (props.type) {
@@ -82,6 +74,22 @@ export default function Input(props: FormInputProps) {
       return (
         <textarea id={labelId} placeholder={placeholder} value={value || ""} onChange={onChange} />
       );
+    case "multiselect":
+      return (
+        <div>
+          <p className="text-navy">{props.prompt}</p>
+          {props.options.map((el) => {
+            return (
+              <div key={el} className="flex ml-4">
+                <div className="w-4 h-4">
+                  <input onChange={onCheck} type="checkbox" id={el} name={el} className="hover:cursor-pointer w-4" checked={getHistoryAnswer(formData[formDataKey], el)} />
+                </div>
+                <p className="text-navy ml-2 mt-[10px]">{el}</p>
+              </div>
+            );
+          })}
+        </div>
+      );
     default:
       return (
         <input
@@ -96,21 +104,40 @@ export default function Input(props: FormInputProps) {
   }
 }
 
-export function updateHistoryArray<T extends Object>(
-  array: Array<T> | undefined,
-  index: number,
-  update: Object
-): Array<T> {
+function getHistoryAnswer(array: any, question: string): boolean {
+  let answer = false;
+  array?.forEach((entry: Question) => {
+      if (entry.question === question) {
+        answer = entry.answer;
+      }
+    }
+  );
+  return answer;
+}
+
+export function updateHistoryArray(
+  array: Array<Question> | undefined,
+  updatedEntry: Question
+): Array<Question> {
   if (!array) {
     array = [];
   }
 
-  if (array[index] !== undefined) {
-    array[index] = { ...array[index], ...update };
-  } else {
-    array.push(update as T);
+  let questionExists = false;
+  array?.forEach((entry: Question) => {
+      if (entry.question === updatedEntry.question) {
+        entry.answer = updatedEntry.answer;
+        questionExists = true;
+      }
+    }
+  );
+
+  if (questionExists) {
+    return array;
   }
-  return array;
+  else {
+    return [...array, updatedEntry];
+  }
 }
 
 export function isoDateOnly(date: Date) {

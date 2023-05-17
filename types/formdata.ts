@@ -1,9 +1,7 @@
 import {
   ApplicationMethod,
   AssessmentOutcome,
-  CriminalHistoryType,
   DenialReason,
-  EvictionReason,
   Race,
   Ethnicity,
   Organization,
@@ -21,8 +19,10 @@ export interface SubmittableFormData {
   yearlyIncome: number;
   creditScore?: string;
   rentalDebt?: string;
-  evictionHistory?: Array<Eviction>;
-  criminalHistory?: Array<CriminalHistoryEntry>;
+  evictionHistory?: Array<Question>;
+  evictionHistoryTimeframe?: string;
+  criminalHistory?: Array<Question>;
+  criminalHistoryTimeframe?: string;
   street?: string;
   unit?: string;
   city: string;
@@ -50,13 +50,7 @@ export type FormData = {
   [Property in keyof SubmittableFormData]+?: SubmittableFormData[Property];
 };
 
-export interface Eviction {
-  evictionReason: EvictionReason;
-  evictionDate: Date;
-}
-
-export interface CriminalHistoryEntry {
-  criminalHistoryType: CriminalHistoryType;
-  convictionDate: Date;
-  offenseName: string;
+export interface Question {
+  question: string;
+  answer: boolean;
 }
