@@ -20,6 +20,7 @@ const Header: NextPage<Props> = function Header(props) {
                             <Image
                                 src={logo}
                                 alt="TBHI Logo"
+                                priority={true}
                             />
                         </div>
                         <h2 className="text-white text-center ml-[30%]">Housing Outcome Submission Form</h2>

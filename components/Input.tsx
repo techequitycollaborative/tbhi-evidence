@@ -140,9 +140,14 @@ export function updateHistoryArray(
   }
 }
 
-export function isoDateOnly(date: Date) {
+export function isoDateOnly(date: Date|string) {
   if (date) {
-    return date.toISOString().split("T")[0];
+    if (typeof date === 'string') {
+      return date.split("T")[0];
+    }
+    else {
+      return date.toISOString().split("T")[0];
+    }
   }
   return "";
 }

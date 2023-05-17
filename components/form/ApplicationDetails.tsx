@@ -52,7 +52,7 @@ export function validateApplication(formData: any): { [key: string]: string } {
 
   if (formData.assessmentOutcome === "Denied") {
     if (!formData.denialReason) {
-      errors.denialReason = "Denial reason is required";
+      errors.denialReason = "If assessment was denied, reason is required";
     } else if (!DenialReason.includes(formData.denialReason)) {
       errors.denialReason = "Denial reason must be from provided list";
     } else if (formData.denialReason === "Other" && !formData.otherDenialReason) {
@@ -78,7 +78,7 @@ const ApplicationDetails = (props: FormProps) => {
             labelId="screeningCompanyName"
             labelText="Name of Screening Company*"
             formDataKey="screeningCompanyName"
-            placeholder="enter name"
+            placeholder="enter name of company on application"
             type="text"
           />
           <FormField
@@ -89,6 +89,10 @@ const ApplicationDetails = (props: FormProps) => {
             placeholder="date of application"
             type="date"
           />
+      </div>
+      <div className="flex gap-4 w-full mb-2">
+          <p className="flex-1 text-sm px-1">If unsure, write &quot;not provided&quot;, or include any details you do know</p>
+          <p className="flex-1 text-sm px-1">If unsure of exact date, an estimate is fine</p>
       </div>
       <div className="flex gap-4 w-full">
         <FormField
@@ -102,7 +106,7 @@ const ApplicationDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="portableScreeningFee"
-          labelText="Portable Screening Fee*"
+          labelText="Did You Use a Portable Screening Fee*"
           formDataKey="portableScreeningFee"
           placeholder="select one"
           type="select"
