@@ -78,7 +78,7 @@ const ApplicationDetails = (props: FormProps) => {
             labelId="screeningCompanyName"
             labelText="Name of Screening Company*"
             formDataKey="screeningCompanyName"
-            placeholder="enter name of company on application"
+            placeholder="name of company on application"
             type="text"
           />
           <FormField
