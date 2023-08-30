@@ -66,7 +66,7 @@ export const AssessmentOutcome = ["Accepted", "Accepted with conditions (such as
 export type AssessmentOutcome = (typeof AssessmentOutcome)[number];
 
 export const DenialReason = [
-  "Credit score",
+  "Credit",
   "Income",
   "Eviction history",
   "Criminal history",

@@ -31,9 +31,7 @@ export function validateApplicant(formData: FormData) {
     errors.age = "Age must be a positive number";
   }
 
-  if (!formData.yearlyIncome) {
-    errors.yearlyIncome = "Yearly income is required";
-  } else if (isNaN(formData.yearlyIncome) || formData.yearlyIncome < 0) {
+  if (!isNaN(formData.yearlyIncome) && formData.yearlyIncome < 0) {
     errors.yearlyIncome = "Yearly income must be a non-negative number.";
   }
 
@@ -92,7 +90,7 @@ const ApplicantDetails = (props: FormProps) => {
         <FormField
           {...props}
           labelId="yearlyIncome"
-          labelText="Yearly Income*"
+          labelText="Yearly Income"
           formDataKey="yearlyIncome"
           placeholder="approximate yearly income"
           type="number"
