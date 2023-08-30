@@ -31,7 +31,7 @@ export function validateApplicant(formData: FormData) {
     errors.age = "Age must be a positive number";
   }
 
-  if (!isNaN(formData.yearlyIncome) && formData.yearlyIncome < 0) {
+  if (formData.yearlyIncome && (isNaN(formData.yearlyIncome) || formData.yearlyIncome < 0)) {
     errors.yearlyIncome = "Yearly income must be a non-negative number.";
   }
 
