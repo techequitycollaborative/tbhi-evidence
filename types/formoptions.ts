@@ -18,9 +18,9 @@ export const Ethnicity = [
 export type Ethnicity = (typeof Ethnicity)[number];
 
 export const Organization = [
-  "Organization 1",
-  "Organization 2",
-  "Organization 3",
+  "East Bay Community Law Center",
+  "Sourthern Louisiana Legal Services",
+  "Equal Rights Center",
 ] as const;
 export type Organization = (typeof Organization)[number];
 

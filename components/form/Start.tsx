@@ -97,12 +97,18 @@ function Start(props: FormProps) {
     <>
       <p>Led by TechEquity Collaborative, a group of housing-focused organizations are conducting this survey to study the impact of algorithm-backed tenant screening technology. Here, you may submit details of an application for yourself or on behalf of an applicant. Please have applicant, property, and application details ready.</p>
       <h3 className="font-bold mt-4 text-xl">Privacy Policy</h3>
-      <p className="my-2">Please read the <a className="font-bold hover:opacity-70 text-blue" target="_blank" href="privacy">privacy policy</a> and confirm:</p>
+      <p className="my-2">Please read the <a className="font-bold hover:opacity-70 text-blue" target="_blank" href="privacy">privacy policy</a> and select one of the following:</p>
       <div className="flex ml-8">
         <div className="w-4">
           <input onChange={handleIndividualClick} type="checkbox" id="individual" name="individual" className="hover:cursor-pointer w-4" checked={privacyOption === "individual" ? true : false} />
         </div>
-        <p className="m-2 mt-[9px] flex-grow">I consent to providing my information and housing experiences to TechEquity Collaborative</p>
+        <p className="m-2 mt-[9px] flex-grow">I consent to providing my information and housing experiences to TechEquity Collaborative (individual)</p>
+      </div>
+      <div className="flex ml-8">
+        <div className="w-4">
+          <input onChange={handleOrganizationClick} type="checkbox" id="organization" name="organization" className="hover:cursor-pointer w-4" checked={privacyOption === "organization" ? true : false} />
+        </div>
+        <p className="m-2 mt-[9px]">I have received consent from the housing applicant to provide their information and housing experiences (organization submitting on behalf of client)</p>
       </div>
       <div className="ml-8">
         {props.errors?.userType && (

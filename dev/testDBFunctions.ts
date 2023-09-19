@@ -14,7 +14,7 @@ export function testSubmit() {
       body: JSON.stringify({
         email: "conr;ad@made--up.biz/* */",
         userType: "individual",
-        organization: "Organization 1",
+        organization: "East Bay Community Law Center",
         race: "Black or African American",
         ethnicity: "No Response",
         age: 50,
